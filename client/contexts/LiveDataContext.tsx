@@ -70,11 +70,11 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(false);
 
   // Test connection on initialization
-  useState(() => {
+  useEffect(() => {
     console.log("LiveDataProvider initialized");
     console.log("Testing immediate API connectivity...");
     // Immediate test of API endpoint
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       fetch(`${API_BASE_URL}/public/stats`)
         .then((response) => {
           console.log(
@@ -87,7 +87,9 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
         .then((data) => console.log("Direct fetch test data:", data))
         .catch((error) => console.log("Direct fetch test error:", error));
     }, 100);
-  });
+
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   // XMLHttpRequest fallback for when fetch is compromised by third-party scripts
   const xhrRequest = (url: string): Promise<any> => {
