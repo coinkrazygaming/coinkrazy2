@@ -66,6 +66,22 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
   });
   const [loading, setLoading] = useState(false);
 
+  // Test connection on initialization
+  useState(() => {
+    console.log('LiveDataProvider initialized');
+    console.log('Testing immediate API connectivity...');
+    // Immediate test of API endpoint
+    setTimeout(() => {
+      fetch(`${API_BASE_URL}/public/stats`)
+        .then(response => {
+          console.log('Direct fetch test result:', response.status, response.ok);
+          return response.json();
+        })
+        .then(data => console.log('Direct fetch test data:', data))
+        .catch(error => console.log('Direct fetch test error:', error));
+    }, 100);
+  });
+
   // XMLHttpRequest fallback for when fetch is compromised by third-party scripts
   const xhrRequest = (url: string): Promise<any> => {
     return new Promise((resolve) => {
