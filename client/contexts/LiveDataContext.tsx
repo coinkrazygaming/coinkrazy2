@@ -57,7 +57,49 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
   });
   const [loading, setLoading] = useState(false);
 
-  // API call helper with better error isolation
+  // XMLHttpRequest fallback for when fetch is compromised by third-party scripts
+  const xhrRequest = (url: string): Promise<any> => {
+    return new Promise((resolve) => {
+      try {
+        const xhr = new XMLHttpRequest();
+        xhr.timeout = 10000; // 10 second timeout
+        xhr.open('GET', url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onload = () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            try {
+              const data = JSON.parse(xhr.responseText);
+              resolve(data);
+            } catch (parseError) {
+              console.warn(`JSON parse error for ${url}:`, parseError);
+              resolve(null);
+            }
+          } else {
+            console.warn(`XHR request failed with status ${xhr.status}: ${url}`);
+            resolve(null);
+          }
+        };
+
+        xhr.onerror = () => {
+          console.warn(`XHR network error: ${url}`);
+          resolve(null);
+        };
+
+        xhr.ontimeout = () => {
+          console.warn(`XHR timeout: ${url}`);
+          resolve(null);
+        };
+
+        xhr.send();
+      } catch (error) {
+        console.warn(`XHR setup error for ${url}:`, error);
+        resolve(null);
+      }
+    });
+  };
+
+  // API call helper with fetch and XHR fallback
   const apiCall = async (endpoint: string, options: RequestInit = {}) => {
     const url = `${API_BASE_URL}${endpoint}`;
     const config: RequestInit = {
@@ -68,6 +110,7 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
       ...options,
     };
 
+    // Try fetch first
     try {
       // Store reference to native fetch before any scripts can override it
       const originalFetch = window.fetch.bind(window);
@@ -85,22 +128,24 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        console.warn(`API call failed with status ${response.status}: ${url}`);
-        return null;
+        console.warn(`Fetch failed with status ${response.status}: ${url}, trying XHR fallback`);
+        return await xhrRequest(url);
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
-      // Log error details for debugging but don't throw
+      // Log error details and try XHR fallback
       if (error instanceof Error) {
         if (error.name === 'AbortError') {
-          console.warn(`API call timeout: ${url}`);
+          console.warn(`Fetch timeout: ${url}, trying XHR fallback`);
         } else {
-          console.warn(`API call error for ${url}:`, error.message);
+          console.warn(`Fetch error for ${url}: ${error.message}, trying XHR fallback`);
         }
       }
-      return null;
+
+      // Fallback to XHR
+      return await xhrRequest(url);
     }
   };
 
