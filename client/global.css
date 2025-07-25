@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /**
+   * CoinKrazy.com Casino Theme - Blue and Gold
+   * tailwind.config.ts expects the following color variables to be expressed as HSL values.
+  */
+  :root {
+    --background: 220 15% 8%;
+    --foreground: 43 100% 85%;
+
+    --card: 220 15% 12%;
+    --card-foreground: 43 100% 85%;
+
+    --popover: 220 15% 12%;
+    --popover-foreground: 43 100% 85%;
+
+    --primary: 43 100% 50%;
+    --primary-foreground: 220 15% 8%;
+
+    --secondary: 217 30% 18%;
+    --secondary-foreground: 43 90% 70%;
+
+    --muted: 217 25% 15%;
+    --muted-foreground: 43 30% 60%;
+
+    --accent: 210 100% 50%;
+    --accent-foreground: 43 100% 85%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 43 100% 85%;
+
+    --border: 217 25% 20%;
+    --input: 217 25% 15%;
+    --ring: 43 100% 50%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 220 15% 10%;
+    --sidebar-foreground: 43 100% 85%;
+    --sidebar-primary: 43 100% 50%;
+    --sidebar-primary-foreground: 220 15% 8%;
+    --sidebar-accent: 210 100% 50%;
+    --sidebar-accent-foreground: 43 100% 85%;
+    --sidebar-border: 217 25% 20%;
+    --sidebar-ring: 43 100% 50%;
+  }
+
+  .dark {
+    --background: 220 20% 5%;
+    --foreground: 43 100% 88%;
+
+    --card: 220 20% 8%;
+    --card-foreground: 43 100% 88%;
+
+    --popover: 220 20% 8%;
+    --popover-foreground: 43 100% 88%;
+
+    --primary: 43 100% 55%;
+    --primary-foreground: 220 20% 5%;
+
+    --secondary: 217 35% 12%;
+    --secondary-foreground: 43 95% 75%;
+
+    --muted: 217 30% 10%;
+    --muted-foreground: 43 25% 65%;
+
+    --accent: 210 100% 55%;
+    --accent-foreground: 43 100% 88%;
+
+    --destructive: 0 65% 35%;
+    --destructive-foreground: 43 100% 88%;
+
+    --border: 217 30% 15%;
+    --input: 217 30% 10%;
+    --ring: 43 100% 55%;
+
+    --sidebar-background: 220 20% 6%;
+    --sidebar-foreground: 43 100% 88%;
+    --sidebar-primary: 43 100% 55%;
+    --sidebar-primary-foreground: 220 20% 5%;
+    --sidebar-accent: 210 100% 55%;
+    --sidebar-accent-foreground: 43 100% 88%;
+    --sidebar-border: 217 30% 15%;
+    --sidebar-ring: 43 100% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .casino-glow {
+    box-shadow: 0 0 20px rgba(241, 192, 106, 0.3);
+  }
+
+  .casino-pulse {
+    animation: pulse-gold 2s infinite;
+  }
+
+  @keyframes pulse-gold {
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(241, 192, 106, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(241, 192, 106, 0.6);
+    }
+  }
+
+  .casino-gradient {
+    background: linear-gradient(
+      135deg,
+      #1e3a8a 0%,
+      #1e40af 25%,
+      #2563eb 50%,
+      #3b82f6 75%,
+      #f1c06a 100%
+    );
+  }
+}
