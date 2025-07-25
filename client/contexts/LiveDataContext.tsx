@@ -74,24 +74,29 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
         xhr.timeout = 10000; // 10 second timeout
         xhr.open('GET', url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.withCredentials = true; // Include credentials for CORS
 
         xhr.onload = () => {
+          console.log(`XHR completed for ${url}, status: ${xhr.status}`);
           if (xhr.status >= 200 && xhr.status < 300) {
             try {
               const data = JSON.parse(xhr.responseText);
+              console.log('XHR success, data received:', data ? 'yes' : 'no');
               resolve(data);
             } catch (parseError) {
               console.warn(`JSON parse error for ${url}:`, parseError);
+              console.log('Raw response text:', xhr.responseText);
               resolve(null);
             }
           } else {
             console.warn(`XHR request failed with status ${xhr.status}: ${url}`);
+            console.log('Response text:', xhr.responseText);
             resolve(null);
           }
         };
 
-        xhr.onerror = () => {
-          console.warn(`XHR network error: ${url}`);
+        xhr.onerror = (event) => {
+          console.warn(`XHR network error: ${url}`, event);
           resolve(null);
         };
 
@@ -100,6 +105,7 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
           resolve(null);
         };
 
+        console.log(`Starting XHR request to ${url}`);
         xhr.send();
       } catch (error) {
         console.warn(`XHR setup error for ${url}:`, error);
