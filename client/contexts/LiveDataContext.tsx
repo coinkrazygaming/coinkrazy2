@@ -40,14 +40,17 @@ const ORIGINAL_FETCH = (() => {
 const getApiBaseUrl = () => {
   try {
     // In development, use explicit localhost
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    if (
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1"
+    ) {
       return `${window.location.protocol}//${window.location.hostname}:8080/api`;
     }
     // In production, use current origin
     return `${window.location.origin}/api`;
   } catch (error) {
     // Fallback if window.location is not available
-    return '/api';
+    return "/api";
   }
 };
 
@@ -68,17 +71,21 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
 
   // Test connection on initialization
   useState(() => {
-    console.log('LiveDataProvider initialized');
-    console.log('Testing immediate API connectivity...');
+    console.log("LiveDataProvider initialized");
+    console.log("Testing immediate API connectivity...");
     // Immediate test of API endpoint
     setTimeout(() => {
       fetch(`${API_BASE_URL}/public/stats`)
-        .then(response => {
-          console.log('Direct fetch test result:', response.status, response.ok);
+        .then((response) => {
+          console.log(
+            "Direct fetch test result:",
+            response.status,
+            response.ok,
+          );
           return response.json();
         })
-        .then(data => console.log('Direct fetch test data:', data))
-        .catch(error => console.log('Direct fetch test error:', error));
+        .then((data) => console.log("Direct fetch test data:", data))
+        .catch((error) => console.log("Direct fetch test error:", error));
     }, 100);
   });
 
@@ -88,8 +95,8 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
       try {
         const xhr = new XMLHttpRequest();
         xhr.timeout = 10000; // 10 second timeout
-        xhr.open('GET', url, true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.open("GET", url, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
         xhr.withCredentials = true; // Include credentials for CORS
 
         xhr.onload = () => {
@@ -97,16 +104,18 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
           if (xhr.status >= 200 && xhr.status < 300) {
             try {
               const data = JSON.parse(xhr.responseText);
-              console.log('XHR success, data received:', data ? 'yes' : 'no');
+              console.log("XHR success, data received:", data ? "yes" : "no");
               resolve(data);
             } catch (parseError) {
               console.warn(`JSON parse error for ${url}:`, parseError);
-              console.log('Raw response text:', xhr.responseText);
+              console.log("Raw response text:", xhr.responseText);
               resolve(null);
             }
           } else {
-            console.warn(`XHR request failed with status ${xhr.status}: ${url}`);
-            console.log('Response text:', xhr.responseText);
+            console.warn(
+              `XHR request failed with status ${xhr.status}: ${url}`,
+            );
+            console.log("Response text:", xhr.responseText);
             resolve(null);
           }
         };
@@ -135,12 +144,12 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
     const url = `${API_BASE_URL}${endpoint}`;
 
     // Use XHR by default since FullStory consistently breaks fetch
-    console.log('Making API call to:', url);
+    console.log("Making API call to:", url);
     const data = await xhrRequest(url);
 
     // If XHR fails and we have original fetch, try it as fallback
     if (data === null && ORIGINAL_FETCH) {
-      console.log('XHR failed, trying original fetch as fallback');
+      console.log("XHR failed, trying original fetch as fallback");
       try {
         const config: RequestInit = {
           headers: {
@@ -155,7 +164,7 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
 
         const response = await ORIGINAL_FETCH(url, {
           ...config,
-          signal: controller.signal
+          signal: controller.signal,
         });
         clearTimeout(timeoutId);
 
@@ -163,7 +172,7 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
           return await response.json();
         }
       } catch (error) {
-        console.warn('Original fetch also failed:', error);
+        console.warn("Original fetch also failed:", error);
       }
     }
 
@@ -175,9 +184,9 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
     setLoading(true);
 
     // Debug logging
-    console.log('fetchStats called, API_BASE_URL:', API_BASE_URL);
-    console.log('window.fetch type:', typeof window.fetch);
-    console.log('ORIGINAL_FETCH available:', !!ORIGINAL_FETCH);
+    console.log("fetchStats called, API_BASE_URL:", API_BASE_URL);
+    console.log("window.fetch type:", typeof window.fetch);
+    console.log("ORIGINAL_FETCH available:", !!ORIGINAL_FETCH);
 
     const data = await apiCall("/public/stats");
 
