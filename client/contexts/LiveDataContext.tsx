@@ -108,54 +108,44 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  // API call helper with fetch and XHR fallback
+  // API call helper - Use XHR by default to avoid FullStory interference
   const apiCall = async (endpoint: string, options: RequestInit = {}) => {
     const url = `${API_BASE_URL}${endpoint}`;
-    const config: RequestInit = {
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
-      ...options,
-    };
 
-    // Try fetch first
-    try {
-      // Store reference to native fetch before any scripts can override it
-      const originalFetch = window.fetch.bind(window);
+    // Use XHR by default since FullStory consistently breaks fetch
+    console.log('Making API call to:', url);
+    const data = await xhrRequest(url);
 
-      // Create AbortController for timeout handling
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+    // If XHR fails and we have original fetch, try it as fallback
+    if (data === null && ORIGINAL_FETCH) {
+      console.log('XHR failed, trying original fetch as fallback');
+      try {
+        const config: RequestInit = {
+          headers: {
+            "Content-Type": "application/json",
+            ...options.headers,
+          },
+          ...options,
+        };
 
-      const configWithSignal: RequestInit = {
-        ...config,
-        signal: controller.signal
-      };
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-      const response = await originalFetch(url, configWithSignal);
-      clearTimeout(timeoutId);
+        const response = await ORIGINAL_FETCH(url, {
+          ...config,
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
 
-      if (!response.ok) {
-        console.warn(`Fetch failed with status ${response.status}: ${url}, trying XHR fallback`);
-        return await xhrRequest(url);
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      // Log error details and try XHR fallback
-      if (error instanceof Error) {
-        if (error.name === 'AbortError') {
-          console.warn(`Fetch timeout: ${url}, trying XHR fallback`);
-        } else {
-          console.warn(`Fetch error for ${url}: ${error.message}, trying XHR fallback`);
+        if (response.ok) {
+          return await response.json();
         }
+      } catch (error) {
+        console.warn('Original fetch also failed:', error);
       }
-
-      // Fallback to XHR
-      return await xhrRequest(url);
     }
+
+    return data;
   };
 
   // Fetch live stats from API
