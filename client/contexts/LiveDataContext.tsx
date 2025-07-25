@@ -107,6 +107,10 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
   // Fetch live stats from API
   const fetchStats = async () => {
     setLoading(true);
+
+    // Debug logging
+    console.log('Fetching stats from:', `${API_BASE_URL}/public/stats`);
+
     const data = await apiCall("/public/stats");
 
     if (data && data.stats) {
