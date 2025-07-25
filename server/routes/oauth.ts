@@ -204,7 +204,7 @@ router.get(
   passport.authenticate("google", { session: false }),
   (req, res) => {
     try {
-      const user = req.user as any;
+      const user = (req as any).user;
 
       if (!user) {
         return res.redirect(`${CLIENT_URL}/auth?error=oauth_failed`);
