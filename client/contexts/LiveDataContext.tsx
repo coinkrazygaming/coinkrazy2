@@ -54,19 +54,37 @@ export function LiveDataProvider({ children }: { children: ReactNode }) {
     };
 
     try {
-      // Use native fetch directly to avoid third-party intercepts
-      const nativeFetch = window.fetch;
-      const response = await nativeFetch(url, config);
+      // Store reference to native fetch before any scripts can override it
+      const originalFetch = window.fetch.bind(window);
+
+      // Create AbortController for timeout handling
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+      const configWithSignal: RequestInit = {
+        ...config,
+        signal: controller.signal
+      };
+
+      const response = await originalFetch(url, configWithSignal);
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
-        // Don't log warnings for expected scenarios (server might be down)
+        console.warn(`API call failed with status ${response.status}: ${url}`);
         return null;
       }
 
       const data = await response.json();
       return data;
     } catch (error) {
-      // Silently handle errors since we have fallback data
+      // Log error details for debugging but don't throw
+      if (error instanceof Error) {
+        if (error.name === 'AbortError') {
+          console.warn(`API call timeout: ${url}`);
+        } else {
+          console.warn(`API call error for ${url}:`, error.message);
+        }
+      }
       return null;
     }
   };
