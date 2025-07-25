@@ -27,6 +27,15 @@ const LiveDataContext = createContext<LiveDataContextType | undefined>(
   undefined,
 );
 
+// Store original fetch before any third-party scripts can override it
+const ORIGINAL_FETCH = (() => {
+  try {
+    return window.fetch.bind(window);
+  } catch (error) {
+    return null;
+  }
+})();
+
 // Construct API base URL with fallback
 const getApiBaseUrl = () => {
   try {
