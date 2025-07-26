@@ -2,6 +2,7 @@ import { useState } from "react";
 import ColinShots from "./ColinShots";
 import DogCatcherGame from "./DogCatcherGame";
 import GTAGame from "./GTAGame";
+import FastTetris from "./FastTetris";
 
 interface MiniGameLauncherProps {
   gameSlug: string;
@@ -34,6 +35,21 @@ export default function MiniGameLauncher({
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-auto">
             <div className="relative">
               <GTAGame />
+              <button
+                onClick={onClose}
+                className="absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg z-10"
+              >
+                ✕ Close
+              </button>
+            </div>
+          </div>
+        );
+      case "fasttetris":
+      case "fast-tetris":
+        return (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-auto">
+            <div className="relative">
+              <FastTetris />
               <button
                 onClick={onClose}
                 className="absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg z-10"
