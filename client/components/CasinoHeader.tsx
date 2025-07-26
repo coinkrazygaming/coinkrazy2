@@ -69,13 +69,13 @@ export default function CasinoHeader() {
                 <div className="flex items-center space-x-1 bg-secondary px-3 py-1 rounded-full">
                   <Coins className="w-4 h-4 text-primary" />
                   <span className="text-sm font-medium text-primary">
-                    {user.gold_coins.toLocaleString()} GC
+                    {balanceLoading ? "..." : gcBalance.toLocaleString()} GC
                   </span>
                 </div>
                 <div className="flex items-center space-x-1 bg-accent/20 px-3 py-1 rounded-full">
                   <div className="w-4 h-4 bg-accent rounded-full animate-pulse" />
                   <span className="text-sm font-medium text-accent">
-                    {user.sweeps_coins.toFixed(2)} SC
+                    {balanceLoading ? "..." : scBalance.toFixed(2)} SC
                   </span>
                 </div>
               </div>
@@ -390,13 +390,13 @@ export default function CasinoHeader() {
                   <div className="flex items-center space-x-1 bg-secondary px-3 py-1 rounded-full">
                     <Coins className="w-4 h-4 text-primary" />
                     <span className="text-sm font-medium text-primary">
-                      {user.gold_coins.toLocaleString()} GC
+                      {balanceLoading ? "..." : gcBalance.toLocaleString()} GC
                     </span>
                   </div>
                   <div className="flex items-center space-x-1 bg-accent/20 px-3 py-1 rounded-full">
                     <div className="w-4 h-4 bg-accent rounded-full animate-pulse" />
                     <span className="text-sm font-medium text-accent">
-                      {user.sweeps_coins.toFixed(2)} SC
+                      {balanceLoading ? "..." : scBalance.toFixed(2)} SC
                     </span>
                   </div>
                 </div>
