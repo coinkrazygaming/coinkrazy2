@@ -33,6 +33,8 @@ export default function MiniGames() {
       provider: "CoinKrazy",
       description: "Catch as many dogs as you can in 60 seconds!",
       maxReward: "1.00 SC",
+      difficulty: "Medium",
+      image: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=400&h=300&fit=crop&auto=format",
       component: DogCatcherGame,
     },
     {
