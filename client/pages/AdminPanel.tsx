@@ -10,6 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import CasinoHeader from "@/components/CasinoHeader";
+import BonusAdminSection from "@/components/Admin/BonusAdminSection";
+import SocialMediaAdminSection from "@/components/Admin/SocialMediaAdminSection";
 import {
   Settings,
   Users,
