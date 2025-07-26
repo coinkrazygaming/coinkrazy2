@@ -2616,6 +2616,16 @@ export default function AdminPanel() {
               </Card>
             </div>
           </TabsContent>
+
+          {/* Bonuses Tab */}
+          <TabsContent value="bonuses">
+            <BonusAdminSection />
+          </TabsContent>
+
+          {/* Social Media Tab */}
+          <TabsContent value="social">
+            <SocialMediaAdminSection />
+          </TabsContent>
         </Tabs>
       </div>
     </div>
