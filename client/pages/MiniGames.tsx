@@ -234,8 +234,8 @@ export default function MiniGames() {
               key={index}
               className="casino-glow hover:scale-105 transition-transform cursor-pointer"
               onClick={() => {
-                if (!game.cooldown) {
-                  const slug = game.title
+                if (!game.cooldown || game.cooldown === "Available") {
+                  const slug = game.id || game.title
                     .toLowerCase()
                     .replace(/[']/g, "")
                     .replace(/\s+/g, "-");
@@ -284,8 +284,8 @@ export default function MiniGames() {
                     disabled={!!game.cooldown}
                     onClick={(e) => {
                       e.stopPropagation();
-                      if (!game.cooldown) {
-                        const slug = game.title
+                      if (!game.cooldown || game.cooldown === "Available") {
+                        const slug = game.id || game.title
                           .toLowerCase()
                           .replace(/[']/g, "")
                           .replace(/\s+/g, "-");
@@ -293,7 +293,7 @@ export default function MiniGames() {
                       }
                     }}
                   >
-                    {game.cooldown ? "On Cooldown" : "Play Now 🎮"}
+                    {game.cooldown && game.cooldown !== "Available" ? "On Cooldown" : "Play Now 🎮"}
                   </Button>
                 </div>
               </CardContent>
