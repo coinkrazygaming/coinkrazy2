@@ -10,6 +10,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { LiveDataProvider } from "./contexts/LiveDataContext";
 import { ChatProvider } from "./contexts/ChatContext";
 import { NotificationProvider } from "./contexts/NotificationContext";
+import { BalanceProvider } from "./contexts/BalanceContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Index from "./pages/Index";
@@ -35,7 +36,8 @@ const App = () => (
       <ErrorBoundary>
         <AuthProvider>
           <ErrorBoundary>
-            <LiveDataProvider>
+            <BalanceProvider>
+              <LiveDataProvider>
               <NotificationProvider>
                 <ChatProvider>
                   <TooltipProvider>
@@ -143,6 +145,7 @@ const App = () => (
                 </ChatProvider>
               </NotificationProvider>
             </LiveDataProvider>
+            </BalanceProvider>
           </ErrorBoundary>
         </AuthProvider>
       </ErrorBoundary>
