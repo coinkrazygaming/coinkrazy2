@@ -7,6 +7,7 @@ import CasinoHeader from "@/components/CasinoHeader";
 import GameCard from "@/components/GameCard";
 import MiniGameLauncher from "@/components/MiniGames/MiniGameLauncher";
 import DogCatcherGame from "@/components/MiniGames/DogCatcherGame";
+import GTAGame from "@/components/MiniGames/GTAGame";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   Crown,
@@ -36,6 +37,19 @@ export default function MiniGames() {
       difficulty: "Medium",
       image: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=400&h=300&fit=crop&auto=format",
       component: DogCatcherGame,
+    },
+    {
+      id: "gtaV1",
+      title: "Corey's GTA v1",
+      emoji: "🚗",
+      category: "Mini Game",
+      cooldown: "Available",
+      provider: "CoinKrazy",
+      description: "Steal cars and escape the police in 60 seconds!",
+      maxReward: "0.25 SC",
+      difficulty: "Hard",
+      image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop&auto=format",
+      component: GTAGame,
     },
     {
       title: "Josey's Duck Pond",
