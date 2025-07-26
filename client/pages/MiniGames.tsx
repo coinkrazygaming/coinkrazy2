@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import CasinoHeader from "@/components/CasinoHeader";
 import GameCard from "@/components/GameCard";
 import MiniGameLauncher from "@/components/MiniGames/MiniGameLauncher";
+import DogCatcherGame from "@/components/MiniGames/DogCatcherGame";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   Crown,
@@ -23,6 +24,17 @@ export default function MiniGames() {
   const [selectedMiniGame, setSelectedMiniGame] = useState<string | null>(null);
 
   const miniGames = [
+    {
+      id: "dogCatcher",
+      title: "Dog Catcher",
+      emoji: "🐕",
+      category: "Mini Game",
+      cooldown: "Available",
+      provider: "CoinKrazy",
+      description: "Catch as many dogs as you can in 60 seconds!",
+      maxReward: "1.00 SC",
+      component: DogCatcherGame,
+    },
     {
       title: "Josey's Duck Pond",
       emoji: "🦆",
