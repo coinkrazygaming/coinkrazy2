@@ -22,6 +22,30 @@ function verifyToken(req: any, res: any, next: any) {
   }
 }
 
+// Get user balance
+router.get("/balance", verifyToken, async (req: any, res) => {
+  try {
+    const user = req.user;
+
+    const result = await executeQuery(
+      "SELECT sc_balance, gc_balance FROM users WHERE id = ?",
+      [user.id]
+    );
+
+    if (result.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json({
+      scBalance: result[0].sc_balance || 0,
+      gcBalance: result[0].gc_balance || 0,
+    });
+  } catch (error) {
+    console.error("Balance fetch error:", error);
+    res.status(500).json({ error: "Failed to fetch balance" });
+  }
+});
+
 // Get user profile
 router.get("/profile", verifyToken, async (req: any, res) => {
   try {
