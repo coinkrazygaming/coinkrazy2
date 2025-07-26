@@ -574,7 +574,7 @@ export default function SocialMediaAdminSection() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="new_user">New User Registration</SelectItem>
-                        <SelectItem value="big_win">Big Win (>$100)</SelectItem>
+                        <SelectItem value="big_win">Big Win (&gt;$100)</SelectItem>
                         <SelectItem value="daily">Daily Post</SelectItem>
                         <SelectItem value="weekly">Weekly Summary</SelectItem>
                         <SelectItem value="game_launch">New Game Launch</SelectItem>
