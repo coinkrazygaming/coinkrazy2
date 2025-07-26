@@ -261,7 +261,7 @@ export default function MiniGames() {
                     {game.maxReward}
                   </Badge>
                 </div>
-                {game.cooldown && (
+                {game.cooldown && game.cooldown !== "Available" && (
                   <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-t-lg">
                     <div className="text-center text-white">
                       <Timer className="w-8 h-8 mx-auto mb-2" />
