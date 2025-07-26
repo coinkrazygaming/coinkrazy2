@@ -21,6 +21,7 @@ import chatRoutes from "./routes/chat.js";
 import notificationRoutes from "./routes/notifications.js";
 import sportsRoutes from "./routes/sports.js";
 import oauthRoutes from "./routes/oauth.js";
+import miniGameRoutes from "./routes/mini-games.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -95,6 +96,7 @@ export function createServer() {
   app.use("/api/chat", chatRoutes);
   app.use("/api/notifications", notificationRoutes);
   app.use("/api/sports", sportsRoutes);
+  app.use("/api/games/mini-games", miniGameRoutes);
 
   // Health check
   app.get("/api/health", (req, res) => {
