@@ -8,6 +8,7 @@ import GameCard from "@/components/GameCard";
 import MiniGameLauncher from "@/components/MiniGames/MiniGameLauncher";
 import DogCatcherGame from "@/components/MiniGames/DogCatcherGame";
 import GTAGame from "@/components/MiniGames/GTAGame";
+import FastTetris from "@/components/MiniGames/FastTetris";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   Crown,
@@ -50,6 +51,19 @@ export default function MiniGames() {
       difficulty: "Hard",
       image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop&auto=format",
       component: GTAGame,
+    },
+    {
+      id: "fastTetris",
+      title: "Fast Tetris",
+      emoji: "🧱",
+      category: "Mini Game",
+      cooldown: "Available",
+      provider: "CoinKrazy",
+      description: "Stack as many bricks as possible in 60 seconds!",
+      maxReward: "1.00 SC",
+      difficulty: "Medium",
+      image: "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=400&h=300&fit=crop&auto=format",
+      component: FastTetris,
     },
     {
       title: "Josey's Duck Pond",
