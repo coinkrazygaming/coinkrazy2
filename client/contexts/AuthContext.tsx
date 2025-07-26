@@ -14,6 +14,8 @@ interface User {
   last_name: string;
   gold_coins: number;
   sweeps_coins: number;
+  sc_balance?: number;
+  gc_balance?: number;
   level: number;
   experience_points: number;
   kyc_status: string;
