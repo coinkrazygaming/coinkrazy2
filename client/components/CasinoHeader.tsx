@@ -16,6 +16,7 @@ import {
 import { useAuth } from "@/contexts/AuthContext";
 import { useLiveData } from "@/contexts/LiveDataContext";
 import { useNotifications } from "@/contexts/NotificationContext";
+import { useBalance } from "@/contexts/BalanceContext";
 import ChatWindow from "@/components/Chat/ChatWindow";
 import NotificationCenter from "@/components/Notifications/NotificationCenter";
 
@@ -25,6 +26,7 @@ export default function CasinoHeader() {
   const [isChatMinimized, setIsChatMinimized] = useState(false);
   const { user, logout } = useAuth();
   const { stats } = useLiveData();
+  const { scBalance, gcBalance, isLoading: balanceLoading } = useBalance();
   const {
     unreadCount,
     isOpen: isNotificationsOpen,
