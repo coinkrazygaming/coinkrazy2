@@ -13,7 +13,7 @@ import { NotificationProvider } from "./contexts/NotificationContext";
 import { BalanceProvider } from "./contexts/BalanceContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
-import Index from "./pages/Index";
+import ModernIndex from "./pages/ModernIndex";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import VerifyEmail from "./pages/VerifyEmail";
@@ -45,7 +45,7 @@ const App = () => (
                       <Sonner />
                       <BrowserRouter>
                         <Routes>
-                          <Route path="/" element={<Index />} />
+                          <Route path="/" element={<ModernIndex />} />
                           <Route path="/auth" element={<Auth />} />
                           <Route path="/login" element={<Auth />} />
                           <Route path="/register" element={<Auth />} />
