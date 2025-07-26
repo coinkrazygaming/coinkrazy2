@@ -29,7 +29,7 @@ router.get("/balance", verifyToken, async (req: any, res) => {
 
     const result = await executeQuery(
       "SELECT sc_balance, gc_balance FROM users WHERE id = ?",
-      [user.id]
+      [user.id],
     );
 
     if (result.length === 0) {

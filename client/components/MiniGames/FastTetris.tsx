@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { MiniGameEngine, MINI_GAMES } from '@/lib/miniGameEngine';
-import { useAuth } from '@/contexts/AuthContext';
-import { useBalance } from '@/contexts/BalanceContext';
-import { Trophy, Clock, DollarSign, Target, Square, Zap } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { MiniGameEngine, MINI_GAMES } from "@/lib/miniGameEngine";
+import { useAuth } from "@/contexts/AuthContext";
+import { useBalance } from "@/contexts/BalanceContext";
+import { Trophy, Clock, DollarSign, Target, Square, Zap } from "lucide-react";
 
 interface TetrisBlock {
   x: number;
@@ -22,13 +22,69 @@ interface TetrisPiece {
 }
 
 const TETRIS_PIECES = [
-  { blocks: [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 2, y: 0 }, { x: 3, y: 0 }], color: '#00FFFF' }, // I
-  { blocks: [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 1 }], color: '#FFFF00' }, // O
-  { blocks: [{ x: 1, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 1 }, { x: 2, y: 1 }], color: '#800080' }, // T
-  { blocks: [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 1, y: 1 }, { x: 2, y: 1 }], color: '#00FF00' }, // S
-  { blocks: [{ x: 1, y: 0 }, { x: 2, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 1 }], color: '#FF0000' }, // Z
-  { blocks: [{ x: 0, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 1 }, { x: 2, y: 1 }], color: '#FFA500' }, // L
-  { blocks: [{ x: 2, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 1 }, { x: 2, y: 1 }], color: '#0000FF' }, // J
+  {
+    blocks: [
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 2, y: 0 },
+      { x: 3, y: 0 },
+    ],
+    color: "#00FFFF",
+  }, // I
+  {
+    blocks: [
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 0, y: 1 },
+      { x: 1, y: 1 },
+    ],
+    color: "#FFFF00",
+  }, // O
+  {
+    blocks: [
+      { x: 1, y: 0 },
+      { x: 0, y: 1 },
+      { x: 1, y: 1 },
+      { x: 2, y: 1 },
+    ],
+    color: "#800080",
+  }, // T
+  {
+    blocks: [
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 1, y: 1 },
+      { x: 2, y: 1 },
+    ],
+    color: "#00FF00",
+  }, // S
+  {
+    blocks: [
+      { x: 1, y: 0 },
+      { x: 2, y: 0 },
+      { x: 0, y: 1 },
+      { x: 1, y: 1 },
+    ],
+    color: "#FF0000",
+  }, // Z
+  {
+    blocks: [
+      { x: 0, y: 0 },
+      { x: 0, y: 1 },
+      { x: 1, y: 1 },
+      { x: 2, y: 1 },
+    ],
+    color: "#FFA500",
+  }, // L
+  {
+    blocks: [
+      { x: 2, y: 0 },
+      { x: 0, y: 1 },
+      { x: 1, y: 1 },
+      { x: 2, y: 1 },
+    ],
+    color: "#0000FF",
+  }, // J
 ];
 
 export default function FastTetris() {
@@ -37,7 +93,9 @@ export default function FastTetris() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gameLoopRef = useRef<number>();
   const dropIntervalRef = useRef<NodeJS.Timeout>();
-  const [gameState, setGameState] = useState<'waiting' | 'playing' | 'finished'>('waiting');
+  const [gameState, setGameState] = useState<
+    "waiting" | "playing" | "finished"
+  >("waiting");
   const [timeLeft, setTimeLeft] = useState(60);
   const [score, setScore] = useState(0);
   const [bricksPlaced, setBricksPlaced] = useState(0);
@@ -46,7 +104,10 @@ export default function FastTetris() {
   const [nextPiece, setNextPiece] = useState<TetrisPiece | null>(null);
   const [canPlay, setCanPlay] = useState(true);
   const [cooldownTime, setCooldownTime] = useState(0);
-  const [gameResult, setGameResult] = useState<{ scEarned: number; message: string } | null>(null);
+  const [gameResult, setGameResult] = useState<{
+    scEarned: number;
+    message: string;
+  } | null>(null);
   const [linesCleared, setLinesCleared] = useState(0);
   const [level, setLevel] = useState(1);
 
@@ -68,7 +129,8 @@ export default function FastTetris() {
 
   // Generate random piece
   const generatePiece = useCallback((): TetrisPiece => {
-    const template = TETRIS_PIECES[Math.floor(Math.random() * TETRIS_PIECES.length)];
+    const template =
+      TETRIS_PIECES[Math.floor(Math.random() * TETRIS_PIECES.length)];
     return {
       blocks: [...template.blocks],
       color: template.color,
@@ -82,7 +144,10 @@ export default function FastTetris() {
     if (!user) return;
 
     const checkPlayStatus = async () => {
-      const status = await MiniGameEngine.canPlayGame('fastTetris', user.id.toString());
+      const status = await MiniGameEngine.canPlayGame(
+        "fastTetris",
+        user.id.toString(),
+      );
       setCanPlay(status.canPlay);
       if (!status.canPlay && status.timeUntilNext) {
         setCooldownTime(status.timeUntilNext);
@@ -111,100 +176,117 @@ export default function FastTetris() {
 
   // Game timer
   useEffect(() => {
-    if (gameState === 'playing' && timeLeft > 0) {
+    if (gameState === "playing" && timeLeft > 0) {
       const timer = setTimeout(() => {
         setTimeLeft(timeLeft - 1);
       }, 1000);
       return () => clearTimeout(timer);
-    } else if (gameState === 'playing' && timeLeft === 0) {
+    } else if (gameState === "playing" && timeLeft === 0) {
       endGame();
     }
   }, [gameState, timeLeft]);
 
   // Check collision
-  const checkCollision = useCallback((piece: TetrisPiece, board: (string | null)[][], dx = 0, dy = 0): boolean => {
-    for (const block of piece.blocks) {
-      const newX = piece.x + block.x + dx;
-      const newY = piece.y + block.y + dy;
-      
-      if (newX < 0 || newX >= BOARD_WIDTH || newY >= BOARD_HEIGHT) {
-        return true;
+  const checkCollision = useCallback(
+    (
+      piece: TetrisPiece,
+      board: (string | null)[][],
+      dx = 0,
+      dy = 0,
+    ): boolean => {
+      for (const block of piece.blocks) {
+        const newX = piece.x + block.x + dx;
+        const newY = piece.y + block.y + dy;
+
+        if (newX < 0 || newX >= BOARD_WIDTH || newY >= BOARD_HEIGHT) {
+          return true;
+        }
+
+        if (newY >= 0 && board[newY][newX] !== null) {
+          return true;
+        }
       }
-      
-      if (newY >= 0 && board[newY][newX] !== null) {
-        return true;
-      }
-    }
-    return false;
-  }, []);
+      return false;
+    },
+    [],
+  );
 
   // Place piece on board
-  const placePiece = useCallback((piece: TetrisPiece, board: (string | null)[][]) => {
-    const newBoard = board.map(row => [...row]);
-    
-    for (const block of piece.blocks) {
-      const x = piece.x + block.x;
-      const y = piece.y + block.y;
-      if (y >= 0) {
-        newBoard[y][x] = piece.color;
+  const placePiece = useCallback(
+    (piece: TetrisPiece, board: (string | null)[][]) => {
+      const newBoard = board.map((row) => [...row]);
+
+      for (const block of piece.blocks) {
+        const x = piece.x + block.x;
+        const y = piece.y + block.y;
+        if (y >= 0) {
+          newBoard[y][x] = piece.color;
+        }
       }
-    }
-    
-    return newBoard;
-  }, []);
+
+      return newBoard;
+    },
+    [],
+  );
 
   // Check and clear lines
   const clearLines = useCallback((board: (string | null)[][]) => {
-    const newBoard = board.filter(row => row.some(cell => cell === null));
+    const newBoard = board.filter((row) => row.some((cell) => cell === null));
     const clearedLines = BOARD_HEIGHT - newBoard.length;
-    
+
     // Add empty rows at top
     while (newBoard.length < BOARD_HEIGHT) {
       newBoard.unshift(new Array(BOARD_WIDTH).fill(null));
     }
-    
+
     return { newBoard, clearedLines };
   }, []);
 
   // Rotate piece
   const rotatePiece = useCallback((piece: TetrisPiece): TetrisPiece => {
-    const rotatedBlocks = piece.blocks.map(block => ({
+    const rotatedBlocks = piece.blocks.map((block) => ({
       x: -block.y,
       y: block.x,
     }));
-    
+
     return { ...piece, blocks: rotatedBlocks };
   }, []);
 
   // Keyboard controls
   useEffect(() => {
-    if (gameState !== 'playing' || !currentPiece) return;
+    if (gameState !== "playing" || !currentPiece) return;
 
     const handleKeyPress = (e: KeyboardEvent) => {
       if (!currentPiece) return;
-      
+
       switch (e.key.toLowerCase()) {
-        case 'a':
-        case 'arrowleft':
+        case "a":
+        case "arrowleft":
           if (!checkCollision(currentPiece, board, -1, 0)) {
-            setCurrentPiece(prev => prev ? { ...prev, x: prev.x - 1 } : null);
+            setCurrentPiece((prev) =>
+              prev ? { ...prev, x: prev.x - 1 } : null,
+            );
           }
           break;
-        case 'd':
-        case 'arrowright':
+        case "d":
+        case "arrowright":
           if (!checkCollision(currentPiece, board, 1, 0)) {
-            setCurrentPiece(prev => prev ? { ...prev, x: prev.x + 1 } : null);
+            setCurrentPiece((prev) =>
+              prev ? { ...prev, x: prev.x + 1 } : null,
+            );
           }
           break;
-        case 's':
-        case 'arrowdown':
+        case "s":
+        case "arrowdown":
           if (!checkCollision(currentPiece, board, 0, 1)) {
-            setCurrentPiece(prev => prev ? { ...prev, y: prev.y + 1 } : null);
+            setCurrentPiece((prev) =>
+              prev ? { ...prev, y: prev.y + 1 } : null,
+            );
           }
           break;
-        case 'w':
-        case 'arrowup':
-        case ' ':
+        case "w":
+        case "arrowup":
+        case " ":
           const rotated = rotatePiece(currentPiece);
           if (!checkCollision(rotated, board)) {
             setCurrentPiece(rotated);
@@ -213,18 +295,18 @@ export default function FastTetris() {
       }
     };
 
-    document.addEventListener('keydown', handleKeyPress);
-    return () => document.removeEventListener('keydown', handleKeyPress);
+    document.addEventListener("keydown", handleKeyPress);
+    return () => document.removeEventListener("keydown", handleKeyPress);
   }, [gameState, currentPiece, board, checkCollision, rotatePiece]);
 
   // Auto drop piece
   useEffect(() => {
-    if (gameState !== 'playing' || !currentPiece) return;
+    if (gameState !== "playing" || !currentPiece) return;
 
-    const dropSpeed = Math.max(100, 500 - (level * 50)); // Faster as level increases
+    const dropSpeed = Math.max(100, 500 - level * 50); // Faster as level increases
 
     dropIntervalRef.current = setInterval(() => {
-      setCurrentPiece(prev => {
+      setCurrentPiece((prev) => {
         if (!prev) return null;
 
         if (!checkCollision(prev, board, 0, 1)) {
@@ -233,20 +315,20 @@ export default function FastTetris() {
           // Piece landed, place it
           const newBoard = placePiece(prev, board);
           const { newBoard: clearedBoard, clearedLines } = clearLines(newBoard);
-          
+
           setBoard(clearedBoard);
-          setBricksPlaced(prevBricks => prevBricks + 4); // Each piece has 4 blocks
-          setScore(prevScore => prevScore + (clearedLines * 100) + 10);
-          setLinesCleared(prevLines => prevLines + clearedLines);
-          
+          setBricksPlaced((prevBricks) => prevBricks + 4); // Each piece has 4 blocks
+          setScore((prevScore) => prevScore + clearedLines * 100 + 10);
+          setLinesCleared((prevLines) => prevLines + clearedLines);
+
           if (clearedLines > 0) {
-            setLevel(prevLevel => Math.floor(linesCleared / 10) + 1);
+            setLevel((prevLevel) => Math.floor(linesCleared / 10) + 1);
           }
-          
+
           // Generate next piece
           const next = nextPiece || generatePiece();
           setNextPiece(generatePiece());
-          
+
           return next;
         }
       });
@@ -257,22 +339,33 @@ export default function FastTetris() {
         clearInterval(dropIntervalRef.current);
       }
     };
-  }, [gameState, currentPiece, board, level, nextPiece, checkCollision, placePiece, clearLines, generatePiece, linesCleared]);
+  }, [
+    gameState,
+    currentPiece,
+    board,
+    level,
+    nextPiece,
+    checkCollision,
+    placePiece,
+    clearLines,
+    generatePiece,
+    linesCleared,
+  ]);
 
   // Drawing
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     // Clear canvas
-    ctx.fillStyle = '#000000';
+    ctx.fillStyle = "#000000";
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
     // Draw board grid
-    ctx.strokeStyle = '#333333';
+    ctx.strokeStyle = "#333333";
     ctx.lineWidth = 1;
     for (let x = 0; x <= BOARD_WIDTH; x++) {
       ctx.beginPath();
@@ -292,7 +385,12 @@ export default function FastTetris() {
       for (let x = 0; x < BOARD_WIDTH; x++) {
         if (board[y] && board[y][x]) {
           ctx.fillStyle = board[y][x]!;
-          ctx.fillRect(x * BLOCK_SIZE + 1, y * BLOCK_SIZE + 1, BLOCK_SIZE - 2, BLOCK_SIZE - 2);
+          ctx.fillRect(
+            x * BLOCK_SIZE + 1,
+            y * BLOCK_SIZE + 1,
+            BLOCK_SIZE - 2,
+            BLOCK_SIZE - 2,
+          );
         }
       }
     }
@@ -304,24 +402,29 @@ export default function FastTetris() {
         const x = currentPiece.x + block.x;
         const y = currentPiece.y + block.y;
         if (x >= 0 && x < BOARD_WIDTH && y >= 0) {
-          ctx.fillRect(x * BLOCK_SIZE + 1, y * BLOCK_SIZE + 1, BLOCK_SIZE - 2, BLOCK_SIZE - 2);
+          ctx.fillRect(
+            x * BLOCK_SIZE + 1,
+            y * BLOCK_SIZE + 1,
+            BLOCK_SIZE - 2,
+            BLOCK_SIZE - 2,
+          );
         }
       }
     }
 
     // Draw UI panel
     const panelX = BOARD_WIDTH * BLOCK_SIZE + 10;
-    ctx.fillStyle = 'rgba(0,0,0,0.8)';
+    ctx.fillStyle = "rgba(0,0,0,0.8)";
     ctx.fillRect(panelX, 0, 180, CANVAS_HEIGHT);
 
     // CoinKrazy.com branding
-    ctx.fillStyle = '#FFD700';
-    ctx.font = 'bold 16px Arial';
-    ctx.fillText('CoinKrazy.com', panelX + 10, 30);
+    ctx.fillStyle = "#FFD700";
+    ctx.font = "bold 16px Arial";
+    ctx.fillText("CoinKrazy.com", panelX + 10, 30);
 
     // Game stats
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = 'bold 14px Arial';
+    ctx.fillStyle = "#FFFFFF";
+    ctx.font = "bold 14px Arial";
     ctx.fillText(`Time: ${timeLeft}s`, panelX + 10, 60);
     ctx.fillText(`Bricks: ${bricksPlaced}/${TARGET_BRICKS}`, panelX + 10, 80);
     ctx.fillText(`Score: ${score}`, panelX + 10, 100);
@@ -329,10 +432,10 @@ export default function FastTetris() {
     ctx.fillText(`Level: ${level}`, panelX + 10, 140);
 
     // Next piece preview
-    ctx.fillStyle = '#FFD700';
-    ctx.font = 'bold 12px Arial';
-    ctx.fillText('NEXT:', panelX + 10, 170);
-    
+    ctx.fillStyle = "#FFD700";
+    ctx.font = "bold 12px Arial";
+    ctx.fillText("NEXT:", panelX + 10, 170);
+
     if (nextPiece) {
       ctx.fillStyle = nextPiece.color;
       for (const block of nextPiece.blocks) {
@@ -343,28 +446,37 @@ export default function FastTetris() {
     }
 
     // Controls
-    ctx.fillStyle = '#AAAAAA';
-    ctx.font = '10px Arial';
-    ctx.fillText('Controls:', panelX + 10, 250);
-    ctx.fillText('A/D - Move', panelX + 10, 265);
-    ctx.fillText('S - Drop', panelX + 10, 280);
-    ctx.fillText('W/Space - Rotate', panelX + 10, 295);
+    ctx.fillStyle = "#AAAAAA";
+    ctx.font = "10px Arial";
+    ctx.fillText("Controls:", panelX + 10, 250);
+    ctx.fillText("A/D - Move", panelX + 10, 265);
+    ctx.fillText("S - Drop", panelX + 10, 280);
+    ctx.fillText("W/Space - Rotate", panelX + 10, 295);
 
     // Progress bar
     const progress = Math.min(1, bricksPlaced / TARGET_BRICKS);
-    ctx.fillStyle = '#333333';
+    ctx.fillStyle = "#333333";
     ctx.fillRect(panelX + 10, 320, 160, 20);
-    ctx.fillStyle = progress >= 1 ? '#00FF00' : '#FFD700';
+    ctx.fillStyle = progress >= 1 ? "#00FF00" : "#FFD700";
     ctx.fillRect(panelX + 10, 320, 160 * progress, 20);
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = '10px Arial';
-    ctx.fillText('Progress to Max SC', panelX + 10, 355);
-  }, [board, currentPiece, nextPiece, timeLeft, bricksPlaced, score, linesCleared, level]);
+    ctx.fillStyle = "#FFFFFF";
+    ctx.font = "10px Arial";
+    ctx.fillText("Progress to Max SC", panelX + 10, 355);
+  }, [
+    board,
+    currentPiece,
+    nextPiece,
+    timeLeft,
+    bricksPlaced,
+    score,
+    linesCleared,
+    level,
+  ]);
 
   const startGame = async () => {
     if (!canPlay) return;
 
-    setGameState('playing');
+    setGameState("playing");
     setTimeLeft(60);
     setScore(0);
     setBricksPlaced(0);
@@ -377,7 +489,7 @@ export default function FastTetris() {
   };
 
   const endGame = async () => {
-    setGameState('finished');
+    setGameState("finished");
     if (dropIntervalRef.current) {
       clearInterval(dropIntervalRef.current);
     }
@@ -386,11 +498,15 @@ export default function FastTetris() {
 
     // Calculate reward
     const bricksNotStacked = Math.max(0, TARGET_BRICKS - bricksPlaced);
-    const scEarned = MiniGameEngine.calculateReward('fastTetris', bricksPlaced, bricksNotStacked);
+    const scEarned = MiniGameEngine.calculateReward(
+      "fastTetris",
+      bricksPlaced,
+      bricksNotStacked,
+    );
 
     // Record result
     const result = await MiniGameEngine.recordGameResult({
-      gameId: 'fastTetris',
+      gameId: "fastTetris",
       userId: user.id.toString(),
       score: bricksPlaced,
       scEarned,
@@ -400,9 +516,9 @@ export default function FastTetris() {
     if (result.success) {
       setGameResult({
         scEarned,
-        message: `Congrats! You stacked ${bricksPlaced} bricks and earned ${scEarned.toFixed(2)} SC. ${bricksNotStacked > 0 ? `${bricksNotStacked} bricks not stacked reduced your winnings.` : 'Perfect game!'} Remember 1 SC = $1 but we do not cash out until $100.00 MIN WITHDRAW and subject to sweepstake laws! Come back tomorrow for more Tetris action!`,
+        message: `Congrats! You stacked ${bricksPlaced} bricks and earned ${scEarned.toFixed(2)} SC. ${bricksNotStacked > 0 ? `${bricksNotStacked} bricks not stacked reduced your winnings.` : "Perfect game!"} Remember 1 SC = $1 but we do not cash out until $100.00 MIN WITHDRAW and subject to sweepstake laws! Come back tomorrow for more Tetris action!`,
       });
-      
+
       // Update user balance in real-time
       if (result.newBalance) {
         updateBalance({
@@ -431,16 +547,20 @@ export default function FastTetris() {
         </CardTitle>
         <p className="text-blue-200">{config.description}</p>
       </CardHeader>
-      
+
       <CardContent className="space-y-4">
         {/* Game Stats */}
         <div className="grid grid-cols-4 gap-4 mb-4">
           <div className="text-center">
-            <div className="text-2xl font-bold text-blue-400">{bricksPlaced}</div>
+            <div className="text-2xl font-bold text-blue-400">
+              {bricksPlaced}
+            </div>
             <div className="text-sm text-gray-300">Bricks Stacked</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-yellow-400">{timeLeft}s</div>
+            <div className="text-2xl font-bold text-yellow-400">
+              {timeLeft}s
+            </div>
             <div className="text-sm text-gray-300">Time Left</div>
           </div>
           <div className="text-center">
@@ -465,7 +585,7 @@ export default function FastTetris() {
 
         {/* Game Controls */}
         <div className="flex justify-center gap-4">
-          {canPlay && gameState === 'waiting' && (
+          {canPlay && gameState === "waiting" && (
             <Button
               onClick={startGame}
               size="lg"

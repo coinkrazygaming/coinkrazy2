@@ -36,7 +36,8 @@ export default function MiniGames() {
       description: "Catch as many dogs as you can in 60 seconds!",
       maxReward: "1.00 SC",
       difficulty: "Medium",
-      image: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=400&h=300&fit=crop&auto=format",
+      image:
+        "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=400&h=300&fit=crop&auto=format",
       component: DogCatcherGame,
     },
     {
@@ -49,7 +50,8 @@ export default function MiniGames() {
       description: "Steal cars and escape the police in 60 seconds!",
       maxReward: "0.25 SC",
       difficulty: "Hard",
-      image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop&auto=format",
+      image:
+        "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop&auto=format",
       component: GTAGame,
     },
     {
@@ -62,7 +64,8 @@ export default function MiniGames() {
       description: "Stack as many bricks as possible in 60 seconds!",
       maxReward: "1.00 SC",
       difficulty: "Medium",
-      image: "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=400&h=300&fit=crop&auto=format",
+      image:
+        "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=400&h=300&fit=crop&auto=format",
       component: FastTetris,
     },
     {
@@ -265,10 +268,12 @@ export default function MiniGames() {
               className="casino-glow hover:scale-105 transition-transform cursor-pointer"
               onClick={() => {
                 if (!game.cooldown || game.cooldown === "Available") {
-                  const slug = game.id || game.title
-                    .toLowerCase()
-                    .replace(/[']/g, "")
-                    .replace(/\s+/g, "-");
+                  const slug =
+                    game.id ||
+                    game.title
+                      .toLowerCase()
+                      .replace(/[']/g, "")
+                      .replace(/\s+/g, "-");
                   setSelectedMiniGame(slug);
                 }
               }}
@@ -315,15 +320,19 @@ export default function MiniGames() {
                     onClick={(e) => {
                       e.stopPropagation();
                       if (!game.cooldown || game.cooldown === "Available") {
-                        const slug = game.id || game.title
-                          .toLowerCase()
-                          .replace(/[']/g, "")
-                          .replace(/\s+/g, "-");
+                        const slug =
+                          game.id ||
+                          game.title
+                            .toLowerCase()
+                            .replace(/[']/g, "")
+                            .replace(/\s+/g, "-");
                         setSelectedMiniGame(slug);
                       }
                     }}
                   >
-                    {game.cooldown && game.cooldown !== "Available" ? "On Cooldown" : "Play Now 🎮"}
+                    {game.cooldown && game.cooldown !== "Available"
+                      ? "On Cooldown"
+                      : "Play Now 🎮"}
                   </Button>
                 </div>
               </CardContent>

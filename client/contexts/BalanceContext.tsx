@@ -1,5 +1,11 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useAuth } from './AuthContext';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { useAuth } from "./AuthContext";
 
 interface BalanceContextType {
   scBalance: number;
@@ -23,9 +29,9 @@ export function BalanceProvider({ children }: { children: ReactNode }) {
 
     setIsLoading(true);
     try {
-      const response = await fetch('/api/user/balance', {
+      const response = await fetch("/api/user/balance", {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
@@ -35,7 +41,7 @@ export function BalanceProvider({ children }: { children: ReactNode }) {
         setGcBalance(data.gcBalance || 0);
       }
     } catch (error) {
-      console.warn('Failed to fetch balance:', error);
+      console.warn("Failed to fetch balance:", error);
     } finally {
       setIsLoading(false);
     }
@@ -81,16 +87,14 @@ export function BalanceProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <BalanceContext.Provider value={value}>
-      {children}
-    </BalanceContext.Provider>
+    <BalanceContext.Provider value={value}>{children}</BalanceContext.Provider>
   );
 }
 
 export function useBalance() {
   const context = useContext(BalanceContext);
   if (context === undefined) {
-    throw new Error('useBalance must be used within a BalanceProvider');
+    throw new Error("useBalance must be used within a BalanceProvider");
   }
   return context;
 }

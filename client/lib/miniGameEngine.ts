@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 // Game result schema
 export const GameResultSchema = z.object({
@@ -42,10 +42,10 @@ export interface MiniGameConfig {
 // Available mini games
 export const MINI_GAMES: Record<string, MiniGameConfig> = {
   dogCatcher: {
-    id: 'dogCatcher',
-    name: 'Dog Catcher',
-    description: 'Catch as many dogs as you can in 60 seconds!',
-    thumbnail: '/images/mini-games/dog-catcher.webp',
+    id: "dogCatcher",
+    name: "Dog Catcher",
+    description: "Catch as many dogs as you can in 60 seconds!",
+    thumbnail: "/images/mini-games/dog-catcher.webp",
     cooldownHours: 24,
     maxScReward: 1.0,
     baseScRate: 0.01, // 0.01 SC per dog caught
@@ -53,10 +53,10 @@ export const MINI_GAMES: Record<string, MiniGameConfig> = {
     leaderboardPrize: 5,
   },
   gtaV1: {
-    id: 'gtaV1',
+    id: "gtaV1",
     name: "Corey's GTA v1",
-    description: 'Steal cars and escape the police in 60 seconds!',
-    thumbnail: '/images/mini-games/gta-v1.webp',
+    description: "Steal cars and escape the police in 60 seconds!",
+    thumbnail: "/images/mini-games/gta-v1.webp",
     cooldownHours: 24,
     maxScReward: 0.25,
     baseScRate: 0.01,
@@ -64,10 +64,10 @@ export const MINI_GAMES: Record<string, MiniGameConfig> = {
     leaderboardPrize: 5,
   },
   fastTetris: {
-    id: 'fastTetris',
-    name: 'Fast Tetris',
-    description: 'Stack as many bricks as possible in 60 seconds!',
-    thumbnail: '/images/mini-games/fast-tetris.webp',
+    id: "fastTetris",
+    name: "Fast Tetris",
+    description: "Stack as many bricks as possible in 60 seconds!",
+    thumbnail: "/images/mini-games/fast-tetris.webp",
     cooldownHours: 24,
     maxScReward: 1.0,
     baseScRate: 0.01, // 0.01 SC per brick stacked
@@ -78,48 +78,53 @@ export const MINI_GAMES: Record<string, MiniGameConfig> = {
 
 // Game state management
 export class MiniGameEngine {
-  static async canPlayGame(gameId: string, userId: string): Promise<{
+  static async canPlayGame(
+    gameId: string,
+    userId: string,
+  ): Promise<{
     canPlay: boolean;
     nextAvailable?: Date;
     timeUntilNext?: number; // seconds
   }> {
     try {
-      const response = await fetch('/api/games/mini-games/mini-game-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/games/mini-games/mini-game-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ gameId, userId }),
       });
-      
+
       if (!response.ok) return { canPlay: true }; // Allow play if session check fails
-      
+
       const session = await response.json();
       const now = new Date();
       const nextAvailable = new Date(session.nextAvailable);
-      
+
       if (now < nextAvailable) {
         return {
           canPlay: false,
           nextAvailable,
-          timeUntilNext: Math.ceil((nextAvailable.getTime() - now.getTime()) / 1000),
+          timeUntilNext: Math.ceil(
+            (nextAvailable.getTime() - now.getTime()) / 1000,
+          ),
         };
       }
-      
+
       return { canPlay: true };
     } catch (error) {
-      console.warn('Error checking game session:', error);
+      console.warn("Error checking game session:", error);
       return { canPlay: true }; // Allow play on error
     }
   }
 
-  static async recordGameResult(result: Omit<GameResult, 'playedAt'>): Promise<{
+  static async recordGameResult(result: Omit<GameResult, "playedAt">): Promise<{
     success: boolean;
     newBalance?: { sc: number; gc: number };
     error?: string;
   }> {
     try {
-      const response = await fetch('/api/games/mini-games/record-result', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/games/mini-games/record-result", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...result,
           playedAt: new Date().toISOString(),
@@ -134,12 +139,15 @@ export class MiniGameEngine {
       const data = await response.json();
       return { success: true, newBalance: data.newBalance };
     } catch (error) {
-      console.error('Error recording game result:', error);
-      return { success: false, error: 'Network error' };
+      console.error("Error recording game result:", error);
+      return { success: false, error: "Network error" };
     }
   }
 
-  static async getLeaderboard(gameId: string, period: 'weekly' | 'monthly' = 'weekly'): Promise<{
+  static async getLeaderboard(
+    gameId: string,
+    period: "weekly" | "monthly" = "weekly",
+  ): Promise<{
     leaderboard: Array<{
       userId: string;
       username: string;
@@ -150,34 +158,40 @@ export class MiniGameEngine {
     userRank?: number;
   }> {
     try {
-      const response = await fetch(`/api/games/mini-games/leaderboard/${gameId}?period=${period}`);
+      const response = await fetch(
+        `/api/games/mini-games/leaderboard/${gameId}?period=${period}`,
+      );
       if (!response.ok) return { leaderboard: [] };
-      
+
       return await response.json();
     } catch (error) {
-      console.warn('Error fetching leaderboard:', error);
+      console.warn("Error fetching leaderboard:", error);
       return { leaderboard: [] };
     }
   }
 
   static formatTimeRemaining(seconds: number): string {
-    if (seconds <= 0) return '00:00:00';
-    
+    if (seconds <= 0) return "00:00:00";
+
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+    return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   }
 
-  static calculateReward(gameId: string, score: number, itemsLost: number = 0): number {
+  static calculateReward(
+    gameId: string,
+    score: number,
+    itemsLost: number = 0,
+  ): number {
     const config = MINI_GAMES[gameId];
     if (!config) return 0;
-    
+
     const grossReward = score * config.baseScRate;
     const penalty = itemsLost * config.baseScRate;
     const netReward = Math.max(0, grossReward - penalty);
-    
+
     return Math.min(netReward, config.maxScReward);
   }
 }
@@ -191,14 +205,17 @@ export class CountdownTimer {
 
   start(callback: (timeLeft: number) => void): void {
     this.callbacks.push(callback);
-    
+
     if (!this.intervalId) {
       this.intervalId = setInterval(() => {
         const now = new Date().getTime();
-        const timeLeft = Math.max(0, Math.ceil((this.endTime.getTime() - now) / 1000));
-        
-        this.callbacks.forEach(cb => cb(timeLeft));
-        
+        const timeLeft = Math.max(
+          0,
+          Math.ceil((this.endTime.getTime() - now) / 1000),
+        );
+
+        this.callbacks.forEach((cb) => cb(timeLeft));
+
         if (timeLeft <= 0) {
           this.stop();
         }

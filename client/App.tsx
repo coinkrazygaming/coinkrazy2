@@ -38,113 +38,116 @@ const App = () => (
           <ErrorBoundary>
             <BalanceProvider>
               <LiveDataProvider>
-              <NotificationProvider>
-                <ChatProvider>
-                  <TooltipProvider>
-                    <Toaster />
-                    <Sonner />
-                    <BrowserRouter>
-                      <Routes>
-                        <Route path="/" element={<Index />} />
-                        <Route path="/auth" element={<Auth />} />
-                        <Route path="/login" element={<Auth />} />
-                        <Route path="/register" element={<Auth />} />
-                        <Route path="/verify-email" element={<VerifyEmail />} />
-                        <Route
-                          path="/dashboard"
-                          element={
-                            <ProtectedRoute>
-                              <Dashboard />
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="/mini-games"
-                          element={
-                            <ProtectedRoute>
-                              <MiniGames />
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="/admin"
-                          element={
-                            <ProtectedRoute
-                              requireAuth={true}
-                              requireAdmin={true}
-                            >
-                              <AdminPanel />
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="/staff"
-                          element={
-                            <ProtectedRoute
-                              requireAuth={true}
-                              requireStaff={true}
-                            >
-                              <StaffPanel />
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="/store"
-                          element={
-                            <ProtectedRoute>
-                              <GoldStore />
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="/gold-store"
-                          element={
-                            <ProtectedRoute>
-                              <GoldStore />
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="/slots"
-                          element={
-                            <ProtectedRoute>
-                              <Slots />
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="/table-games"
-                          element={
-                            <ProtectedRoute>
-                              <TableGames />
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="/sports"
-                          element={
-                            <ProtectedRoute>
-                              <Sports />
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route
-                          path="/bingo"
-                          element={
-                            <ProtectedRoute>
-                              <Bingo />
-                            </ProtectedRoute>
-                          }
-                        />
-                        <Route path="/oauth-test" element={<OAuthTest />} />
-                        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                        <Route path="*" element={<NotFound />} />
-                      </Routes>
-                    </BrowserRouter>
-                  </TooltipProvider>
-                </ChatProvider>
-              </NotificationProvider>
-            </LiveDataProvider>
+                <NotificationProvider>
+                  <ChatProvider>
+                    <TooltipProvider>
+                      <Toaster />
+                      <Sonner />
+                      <BrowserRouter>
+                        <Routes>
+                          <Route path="/" element={<Index />} />
+                          <Route path="/auth" element={<Auth />} />
+                          <Route path="/login" element={<Auth />} />
+                          <Route path="/register" element={<Auth />} />
+                          <Route
+                            path="/verify-email"
+                            element={<VerifyEmail />}
+                          />
+                          <Route
+                            path="/dashboard"
+                            element={
+                              <ProtectedRoute>
+                                <Dashboard />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/mini-games"
+                            element={
+                              <ProtectedRoute>
+                                <MiniGames />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/admin"
+                            element={
+                              <ProtectedRoute
+                                requireAuth={true}
+                                requireAdmin={true}
+                              >
+                                <AdminPanel />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/staff"
+                            element={
+                              <ProtectedRoute
+                                requireAuth={true}
+                                requireStaff={true}
+                              >
+                                <StaffPanel />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/store"
+                            element={
+                              <ProtectedRoute>
+                                <GoldStore />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/gold-store"
+                            element={
+                              <ProtectedRoute>
+                                <GoldStore />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/slots"
+                            element={
+                              <ProtectedRoute>
+                                <Slots />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/table-games"
+                            element={
+                              <ProtectedRoute>
+                                <TableGames />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/sports"
+                            element={
+                              <ProtectedRoute>
+                                <Sports />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route
+                            path="/bingo"
+                            element={
+                              <ProtectedRoute>
+                                <Bingo />
+                              </ProtectedRoute>
+                            }
+                          />
+                          <Route path="/oauth-test" element={<OAuthTest />} />
+                          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                          <Route path="*" element={<NotFound />} />
+                        </Routes>
+                      </BrowserRouter>
+                    </TooltipProvider>
+                  </ChatProvider>
+                </NotificationProvider>
+              </LiveDataProvider>
             </BalanceProvider>
           </ErrorBoundary>
         </AuthProvider>
@@ -155,7 +158,9 @@ const App = () => (
 
 // Prevent multiple root creation during HMR
 const container = document.getElementById("root")!;
-const containerWithRoot = container as HTMLElement & { _reactRootContainer?: any };
+const containerWithRoot = container as HTMLElement & {
+  _reactRootContainer?: any;
+};
 
 if (!containerWithRoot._reactRootContainer) {
   const root = createRoot(container);

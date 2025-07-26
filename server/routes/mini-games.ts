@@ -20,7 +20,7 @@ router.post("/mini-game-session", authenticateToken, async (req, res) => {
     let sessions = await executeQuery(
       `SELECT * FROM mini_game_sessions 
        WHERE user_id = ? AND game_id = ?`,
-      [userId, gameId]
+      [userId, gameId],
     );
 
     if (sessions.length === 0) {
@@ -29,13 +29,13 @@ router.post("/mini-game-session", authenticateToken, async (req, res) => {
         `INSERT INTO mini_game_sessions 
          (user_id, game_id, last_played, next_available, total_plays, best_score, total_sc_earned)
          VALUES (?, ?, '2000-01-01', '2000-01-01', 0, 0, 0)`,
-        [userId, gameId]
+        [userId, gameId],
       );
 
       sessions = await executeQuery(
         `SELECT * FROM mini_game_sessions 
          WHERE user_id = ? AND game_id = ?`,
-        [userId, gameId]
+        [userId, gameId],
       );
     }
 
@@ -58,7 +58,14 @@ router.post("/mini-game-session", authenticateToken, async (req, res) => {
 // Record game result and update balances
 router.post("/record-result", authenticateToken, async (req, res) => {
   try {
-    const { gameId, userId, score, scEarned, gcEarned = 0, duration = 60 } = req.body;
+    const {
+      gameId,
+      userId,
+      score,
+      scEarned,
+      gcEarned = 0,
+      duration = 60,
+    } = req.body;
     const user = (req as any).user;
 
     // Verify user can record this result
@@ -75,7 +82,7 @@ router.post("/record-result", authenticateToken, async (req, res) => {
         `INSERT INTO mini_game_results 
          (user_id, game_id, score, sc_earned, gc_earned, duration, played_at)
          VALUES (?, ?, ?, ?, ?, ?, NOW())`,
-        [userId, gameId, score, scEarned, gcEarned, duration]
+        [userId, gameId, score, scEarned, gcEarned, duration],
       );
 
       // Update user balance
@@ -83,7 +90,7 @@ router.post("/record-result", authenticateToken, async (req, res) => {
         `UPDATE users 
          SET sc_balance = sc_balance + ?, gc_balance = gc_balance + ?
          WHERE id = ?`,
-        [scEarned, gcEarned, userId]
+        [scEarned, gcEarned, userId],
       );
 
       // Update game session
@@ -98,13 +105,13 @@ router.post("/record-result", authenticateToken, async (req, res) => {
              best_score = GREATEST(best_score, ?),
              total_sc_earned = total_sc_earned + ?
          WHERE user_id = ? AND game_id = ?`,
-        [nextAvailable, score, scEarned, userId, gameId]
+        [nextAvailable, score, scEarned, userId, gameId],
       );
 
       // Get updated balance
       const balanceResult = await executeQuery(
         `SELECT sc_balance, gc_balance FROM users WHERE id = ?`,
-        [userId]
+        [userId],
       );
 
       await executeQuery("COMMIT");
@@ -150,7 +157,7 @@ router.get("/leaderboard/:gameId", async (req, res) => {
        GROUP BY u.id, u.username
        ORDER BY score DESC
        LIMIT 20`,
-      [gameId]
+      [gameId],
     );
 
     // Get user's rank if authenticated
@@ -212,18 +219,21 @@ router.get("/admin/stats", authenticateToken, async (req, res) => {
 });
 
 // Admin: Manually award weekly leaderboard prizes
-router.post("/admin/award-weekly-prizes", authenticateToken, async (req, res) => {
-  try {
-    const user = (req as any).user;
-    if (user.role !== "admin") {
-      return res.status(403).json({ error: "Admin access required" });
-    }
+router.post(
+  "/admin/award-weekly-prizes",
+  authenticateToken,
+  async (req, res) => {
+    try {
+      const user = (req as any).user;
+      if (user.role !== "admin") {
+        return res.status(403).json({ error: "Admin access required" });
+      }
 
-    const { gameId } = req.body;
+      const { gameId } = req.body;
 
-    // Get top player for the week
-    const winners = await executeQuery(
-      `SELECT 
+      // Get top player for the week
+      const winners = await executeQuery(
+        `SELECT 
          u.id as userId,
          u.username,
          MAX(r.score) as score
@@ -234,43 +244,44 @@ router.post("/admin/award-weekly-prizes", authenticateToken, async (req, res) =>
        GROUP BY u.id, u.username
        ORDER BY score DESC
        LIMIT 1`,
-      [gameId]
-    );
+        [gameId],
+      );
 
-    if (winners.length === 0) {
-      return res.json({ message: "No winners found for this week" });
-    }
+      if (winners.length === 0) {
+        return res.json({ message: "No winners found for this week" });
+      }
 
-    const winner = winners[0];
-    const prizeAmount = 5; // 5 SC
+      const winner = winners[0];
+      const prizeAmount = 5; // 5 SC
 
-    // Award the prize
-    await executeQuery(
-      `UPDATE users SET sc_balance = sc_balance + ? WHERE id = ?`,
-      [prizeAmount, winner.userId]
-    );
+      // Award the prize
+      await executeQuery(
+        `UPDATE users SET sc_balance = sc_balance + ? WHERE id = ?`,
+        [prizeAmount, winner.userId],
+      );
 
-    // Record the prize transaction
-    await executeQuery(
-      `INSERT INTO transactions 
+      // Record the prize transaction
+      await executeQuery(
+        `INSERT INTO transactions 
        (user_id, transaction_type, amount, description, status, created_at)
        VALUES (?, 'weekly_prize', ?, ?, 'completed', NOW())`,
-      [winner.userId, prizeAmount, `Weekly ${gameId} leaderboard prize`]
-    );
+        [winner.userId, prizeAmount, `Weekly ${gameId} leaderboard prize`],
+      );
 
-    res.json({
-      success: true,
-      winner: {
-        userId: winner.userId,
-        username: winner.username,
-        score: winner.score,
-        prizeAmount,
-      },
-    });
-  } catch (error) {
-    console.error("Award prizes error:", error);
-    res.status(500).json({ error: "Failed to award prizes" });
-  }
-});
+      res.json({
+        success: true,
+        winner: {
+          userId: winner.userId,
+          username: winner.username,
+          score: winner.score,
+          prizeAmount,
+        },
+      });
+    } catch (error) {
+      console.error("Award prizes error:", error);
+      res.status(500).json({ error: "Failed to award prizes" });
+    }
+  },
+);
 
 export default router;
