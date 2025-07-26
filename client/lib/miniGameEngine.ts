@@ -84,7 +84,7 @@ export class MiniGameEngine {
     timeUntilNext?: number; // seconds
   }> {
     try {
-      const response = await fetch('/api/games/mini-game-session', {
+      const response = await fetch('/api/games/mini-games/mini-game-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ gameId, userId }),
@@ -117,7 +117,7 @@ export class MiniGameEngine {
     error?: string;
   }> {
     try {
-      const response = await fetch('/api/games/record-result', {
+      const response = await fetch('/api/games/mini-games/record-result', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -150,7 +150,7 @@ export class MiniGameEngine {
     userRank?: number;
   }> {
     try {
-      const response = await fetch(`/api/games/leaderboard/${gameId}?period=${period}`);
+      const response = await fetch(`/api/games/mini-games/leaderboard/${gameId}?period=${period}`);
       if (!response.ok) return { leaderboard: [] };
       
       return await response.json();
