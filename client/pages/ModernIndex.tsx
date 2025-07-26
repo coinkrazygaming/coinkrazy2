@@ -45,14 +45,14 @@ export default function ModernIndex() {
   useEffect(() => {
     const interval = setInterval(() => {
       const randomWin = Math.random() * 500 + 50;
-      setRealtimeUpdates(prev => ({
+      setRealtimeUpdates((prev) => ({
         ...prev,
         newWinAmount: randomWin,
         flashUpdate: true,
       }));
-      
+
       setTimeout(() => {
-        setRealtimeUpdates(prev => ({ ...prev, flashUpdate: false }));
+        setRealtimeUpdates((prev) => ({ ...prev, flashUpdate: false }));
       }, 2000);
     }, 8000);
 
@@ -68,7 +68,8 @@ export default function ModernIndex() {
       reward: "1.00 SC",
       difficulty: "Medium",
       players: "1,247",
-      image: "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=400&h=300&fit=crop&auto=format",
+      image:
+        "https://images.unsplash.com/photo-1534351590666-13e3e96b5017?w=400&h=300&fit=crop&auto=format",
     },
     {
       id: "gtaV1",
@@ -78,7 +79,8 @@ export default function ModernIndex() {
       reward: "0.25 SC",
       difficulty: "Hard",
       players: "892",
-      image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop&auto=format",
+      image:
+        "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=300&fit=crop&auto=format",
     },
     {
       id: "fastTetris",
@@ -88,7 +90,8 @@ export default function ModernIndex() {
       reward: "1.00 SC",
       difficulty: "Medium",
       players: "1,156",
-      image: "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=400&h=300&fit=crop&auto=format",
+      image:
+        "https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=400&h=300&fit=crop&auto=format",
     },
   ];
 
@@ -98,29 +101,52 @@ export default function ModernIndex() {
       emoji: "🏆",
       provider: "Pragmatic Play",
       rtp: "96.5%",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop&auto=format",
+      image:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop&auto=format",
     },
     {
       title: "Crystal Riches",
       emoji: "💎",
       provider: "Evolution",
       rtp: "97.2%",
-      image: "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?w=400&h=300&fit=crop&auto=format",
+      image:
+        "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?w=400&h=300&fit=crop&auto=format",
     },
     {
       title: "Mega Jackpot",
       emoji: "🎰",
       provider: "NetEnt",
       rtp: "95.8%",
-      image: "https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=300&fit=crop&auto=format",
+      image:
+        "https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=400&h=300&fit=crop&auto=format",
     },
   ];
 
   const recentWins = [
-    { user: "Player***2847", amount: 1247.50, game: "Golden Fortune", time: "2 min ago" },
-    { user: "Player***8392", amount: 892.25, game: "Dog Catcher", time: "5 min ago" },
-    { user: "Player***5671", amount: 2156.75, game: "Crystal Riches", time: "8 min ago" },
-    { user: "Player***9384", amount: 567.50, game: "Fast Tetris", time: "12 min ago" },
+    {
+      user: "Player***2847",
+      amount: 1247.5,
+      game: "Golden Fortune",
+      time: "2 min ago",
+    },
+    {
+      user: "Player***8392",
+      amount: 892.25,
+      game: "Dog Catcher",
+      time: "5 min ago",
+    },
+    {
+      user: "Player***5671",
+      amount: 2156.75,
+      game: "Crystal Riches",
+      time: "8 min ago",
+    },
+    {
+      user: "Player***9384",
+      amount: 567.5,
+      game: "Fast Tetris",
+      time: "12 min ago",
+    },
   ];
 
   return (
@@ -130,8 +156,12 @@ export default function ModernIndex() {
       {/* Hero Section with Real-time Stats */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20" />
-        <div className={"absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.05\"%3E%3Ccircle cx=\"7\" cy=\"7\" r=\"3\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"} />
-        
+        <div
+          className={
+            'absolute inset-0 bg-[url(\'data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Ccircle cx="7" cy="7" r="3"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\')] opacity-50'
+          }
+        />
+
         <div className="relative container mx-auto px-4 py-16">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-4 py-2 rounded-full text-sm font-semibold mb-6">
@@ -139,17 +169,21 @@ export default function ModernIndex() {
               <span>FREE SWEEPS COINS DAILY</span>
               <Sparkles className="w-4 h-4" />
             </div>
-            
+
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
               <span className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent">
                 CoinKrazy
               </span>
               <span className="text-white">.com</span>
             </h1>
-            
+
             <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto">
-              The most exciting social casino with <span className="text-yellow-400 font-bold">real cash prizes</span> 
-              and <span className="text-green-400 font-bold">daily free coins</span>
+              The most exciting social casino with{" "}
+              <span className="text-yellow-400 font-bold">
+                real cash prizes
+              </span>
+              and{" "}
+              <span className="text-green-400 font-bold">daily free coins</span>
             </p>
 
             {!user ? (
@@ -170,9 +204,7 @@ export default function ModernIndex() {
                   className="border-white text-white hover:bg-white hover:text-black px-8 py-4 text-lg"
                   asChild
                 >
-                  <Link to="/login">
-                    Sign In
-                  </Link>
+                  <Link to="/login">Sign In</Link>
                 </Button>
               </div>
             ) : (
@@ -207,11 +239,15 @@ export default function ModernIndex() {
               <CardContent className="p-4 text-center">
                 <div className="flex items-center justify-center mb-2">
                   <Users className="w-6 h-6 text-green-400 mr-2" />
-                  <div className={`text-2xl font-bold text-white ${statsLoading ? 'animate-pulse' : ''}`}>
+                  <div
+                    className={`text-2xl font-bold text-white ${statsLoading ? "animate-pulse" : ""}`}
+                  >
                     {stats.usersOnline.toLocaleString()}
                   </div>
                 </div>
-                <p className="text-green-400 text-sm font-medium">Players Online</p>
+                <p className="text-green-400 text-sm font-medium">
+                  Players Online
+                </p>
                 <div className="flex items-center justify-center mt-1">
                   <ArrowUp className="w-3 h-3 text-green-400" />
                   <span className="text-xs text-green-400">Live</span>
@@ -223,11 +259,15 @@ export default function ModernIndex() {
               <CardContent className="p-4 text-center">
                 <div className="flex items-center justify-center mb-2">
                   <DollarSign className="w-6 h-6 text-yellow-400 mr-2" />
-                  <div className={`text-2xl font-bold text-white ${realtimeUpdates.flashUpdate ? 'animate-pulse text-yellow-400' : ''}`}>
+                  <div
+                    className={`text-2xl font-bold text-white ${realtimeUpdates.flashUpdate ? "animate-pulse text-yellow-400" : ""}`}
+                  >
                     ${stats.totalPayout.toLocaleString()}
                   </div>
                 </div>
-                <p className="text-yellow-400 text-sm font-medium">Today's Payouts</p>
+                <p className="text-yellow-400 text-sm font-medium">
+                  Today's Payouts
+                </p>
                 <div className="flex items-center justify-center mt-1">
                   <Activity className="w-3 h-3 text-yellow-400 animate-pulse" />
                   <span className="text-xs text-yellow-400">Live Updates</span>
@@ -243,7 +283,9 @@ export default function ModernIndex() {
                     ${stats.jackpotAmount.toLocaleString()}
                   </div>
                 </div>
-                <p className="text-purple-400 text-sm font-medium">Progressive Jackpot</p>
+                <p className="text-purple-400 text-sm font-medium">
+                  Progressive Jackpot
+                </p>
                 <div className="flex items-center justify-center mt-1">
                   <Flame className="w-3 h-3 text-orange-400 animate-bounce" />
                   <span className="text-xs text-orange-400">Growing</span>
@@ -259,7 +301,9 @@ export default function ModernIndex() {
                     {stats.gamesPlaying.toLocaleString()}
                   </div>
                 </div>
-                <p className="text-blue-400 text-sm font-medium">Games Playing</p>
+                <p className="text-blue-400 text-sm font-medium">
+                  Games Playing
+                </p>
                 <div className="flex items-center justify-center mt-1">
                   <Play className="w-3 h-3 text-blue-400" />
                   <span className="text-xs text-blue-400">Active Now</span>
@@ -281,7 +325,8 @@ export default function ModernIndex() {
               Daily Mini Games
             </h2>
             <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-              Play once every 24 hours and earn free Sweeps Coins! Each game is a 60-second challenge.
+              Play once every 24 hours and earn free Sweeps Coins! Each game is
+              a 60-second challenge.
             </p>
           </div>
 
@@ -305,12 +350,17 @@ export default function ModernIndex() {
                     </Badge>
                   </div>
                   <div className="absolute top-4 right-4">
-                    <Badge variant="outline" className="bg-black/50 text-white border-white/30">
+                    <Badge
+                      variant="outline"
+                      className="bg-black/50 text-white border-white/30"
+                    >
                       {game.difficulty}
                     </Badge>
                   </div>
                   <div className="absolute bottom-4 left-4 right-4">
-                    <h3 className="text-xl font-bold text-white mb-1">{game.title}</h3>
+                    <h3 className="text-xl font-bold text-white mb-1">
+                      {game.title}
+                    </h3>
                     <div className="flex items-center justify-between text-sm text-gray-300">
                       <span>{game.category}</span>
                       <div className="flex items-center">
@@ -370,11 +420,15 @@ export default function ModernIndex() {
                       </div>
                       <div>
                         <p className="font-semibold text-white">{win.user}</p>
-                        <p className="text-sm text-gray-400">won ${win.amount.toLocaleString()} on {win.game}</p>
+                        <p className="text-sm text-gray-400">
+                          won ${win.amount.toLocaleString()} on {win.game}
+                        </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-2xl font-bold text-green-400">${win.amount.toLocaleString()}</p>
+                      <p className="text-2xl font-bold text-green-400">
+                        ${win.amount.toLocaleString()}
+                      </p>
                       <p className="text-xs text-gray-400">{win.time}</p>
                     </div>
                   </div>
@@ -419,7 +473,9 @@ export default function ModernIndex() {
                     </Badge>
                   </div>
                   <div className="absolute bottom-4 left-4 right-4">
-                    <h3 className="text-xl font-bold text-white mb-1">{game.title}</h3>
+                    <h3 className="text-xl font-bold text-white mb-1">
+                      {game.title}
+                    </h3>
                     <p className="text-sm text-gray-300">{game.provider}</p>
                   </div>
                 </div>
@@ -450,9 +506,10 @@ export default function ModernIndex() {
               Ready to Win Big?
             </h2>
             <p className="text-xl text-blue-100 mb-8">
-              Join thousands of players winning real money every day. Start with your free welcome bonus!
+              Join thousands of players winning real money every day. Start with
+              your free welcome bonus!
             </p>
-            
+
             {!user && (
               <Button
                 size="lg"

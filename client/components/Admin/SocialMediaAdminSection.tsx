@@ -1,14 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Switch } from '@/components/ui/switch';
-import { useToast } from '@/hooks/use-toast';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/hooks/use-toast";
 import {
   Share2,
   MessageCircle,
@@ -32,15 +38,15 @@ import {
   Bot,
   Zap,
   Target,
-} from 'lucide-react';
+} from "lucide-react";
 
 interface SocialMediaPost {
   id: string;
-  platform: 'facebook' | 'twitter' | 'instagram' | 'discord' | 'telegram';
+  platform: "facebook" | "twitter" | "instagram" | "discord" | "telegram";
   content: string;
   image_url?: string;
   scheduled_time?: string;
-  status: 'draft' | 'scheduled' | 'published' | 'failed';
+  status: "draft" | "scheduled" | "published" | "failed";
   engagement?: {
     likes: number;
     shares: number;
@@ -63,7 +69,7 @@ interface SocialMediaStats {
 interface AutomationRule {
   id: string;
   name: string;
-  trigger: 'new_user' | 'big_win' | 'daily' | 'weekly' | 'game_launch';
+  trigger: "new_user" | "big_win" | "daily" | "weekly" | "game_launch";
   platforms: string[];
   template: string;
   active: boolean;
@@ -79,7 +85,7 @@ export default function SocialMediaAdminSection() {
     totalEngagement: 0,
     totalReach: 0,
     activeScheduled: 0,
-    topPerformingPlatform: '',
+    topPerformingPlatform: "",
     weeklyGrowth: 0,
   });
   const [automationRules, setAutomationRules] = useState<AutomationRule[]>([]);
@@ -89,18 +95,18 @@ export default function SocialMediaAdminSection() {
 
   // Form state for creating posts
   const [postForm, setPostForm] = useState({
-    platform: 'facebook' as SocialMediaPost['platform'],
-    content: '',
-    image_url: '',
-    scheduled_time: '',
+    platform: "facebook" as SocialMediaPost["platform"],
+    content: "",
+    image_url: "",
+    scheduled_time: "",
   });
 
   // Form state for automation rules
   const [ruleForm, setRuleForm] = useState({
-    name: '',
-    trigger: 'new_user' as AutomationRule['trigger'],
+    name: "",
+    trigger: "new_user" as AutomationRule["trigger"],
     platforms: [] as string[],
-    template: '',
+    template: "",
   });
 
   useEffect(() => {
@@ -111,9 +117,9 @@ export default function SocialMediaAdminSection() {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch('/api/admin/social-media/posts', {
+      const response = await fetch("/api/admin/social-media/posts", {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
       if (response.ok) {
@@ -121,15 +127,15 @@ export default function SocialMediaAdminSection() {
         setPosts(data.posts || []);
       }
     } catch (error) {
-      console.error('Failed to fetch posts:', error);
+      console.error("Failed to fetch posts:", error);
     }
   };
 
   const fetchStats = async () => {
     try {
-      const response = await fetch('/api/admin/social-media/stats', {
+      const response = await fetch("/api/admin/social-media/stats", {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
       if (response.ok) {
@@ -137,15 +143,15 @@ export default function SocialMediaAdminSection() {
         setStats(data.stats || stats);
       }
     } catch (error) {
-      console.error('Failed to fetch stats:', error);
+      console.error("Failed to fetch stats:", error);
     }
   };
 
   const fetchAutomationRules = async () => {
     try {
-      const response = await fetch('/api/admin/social-media/automation', {
+      const response = await fetch("/api/admin/social-media/automation", {
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
       if (response.ok) {
@@ -153,39 +159,39 @@ export default function SocialMediaAdminSection() {
         setAutomationRules(data.rules || []);
       }
     } catch (error) {
-      console.error('Failed to fetch automation rules:', error);
+      console.error("Failed to fetch automation rules:", error);
     }
   };
 
   const createPost = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/admin/social-media/posts', {
-        method: 'POST',
+      const response = await fetch("/api/admin/social-media/posts", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(postForm),
       });
 
       if (response.ok) {
         toast({
-          title: 'Success',
-          description: 'Social media post created successfully!',
+          title: "Success",
+          description: "Social media post created successfully!",
         });
         fetchPosts();
         fetchStats();
         setShowCreatePost(false);
         resetPostForm();
       } else {
-        throw new Error('Failed to create post');
+        throw new Error("Failed to create post");
       }
     } catch (error) {
       toast({
-        title: 'Error',
-        description: 'Failed to create post',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to create post",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -195,31 +201,31 @@ export default function SocialMediaAdminSection() {
   const createAutomationRule = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/admin/social-media/automation', {
-        method: 'POST',
+      const response = await fetch("/api/admin/social-media/automation", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(ruleForm),
       });
 
       if (response.ok) {
         toast({
-          title: 'Success',
-          description: 'Automation rule created successfully!',
+          title: "Success",
+          description: "Automation rule created successfully!",
         });
         fetchAutomationRules();
         setShowCreateRule(false);
         resetRuleForm();
       } else {
-        throw new Error('Failed to create automation rule');
+        throw new Error("Failed to create automation rule");
       }
     } catch (error) {
       toast({
-        title: 'Error',
-        description: 'Failed to create automation rule',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to create automation rule",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
@@ -228,104 +234,118 @@ export default function SocialMediaAdminSection() {
 
   const toggleAutomationRule = async (ruleId: string, active: boolean) => {
     try {
-      const response = await fetch(`/api/admin/social-media/automation/${ruleId}/toggle`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+      const response = await fetch(
+        `/api/admin/social-media/automation/${ruleId}/toggle`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({ active }),
         },
-        body: JSON.stringify({ active }),
-      });
+      );
 
       if (response.ok) {
         toast({
-          title: 'Success',
-          description: `Automation rule ${active ? 'activated' : 'deactivated'}!`,
+          title: "Success",
+          description: `Automation rule ${active ? "activated" : "deactivated"}!`,
         });
         fetchAutomationRules();
       }
     } catch (error) {
       toast({
-        title: 'Error',
-        description: 'Failed to update automation rule',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to update automation rule",
+        variant: "destructive",
       });
     }
   };
 
   const deletePost = async (postId: string) => {
-    if (!confirm('Are you sure you want to delete this post?')) return;
+    if (!confirm("Are you sure you want to delete this post?")) return;
 
     try {
       const response = await fetch(`/api/admin/social-media/posts/${postId}`, {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
       if (response.ok) {
         toast({
-          title: 'Success',
-          description: 'Post deleted successfully!',
+          title: "Success",
+          description: "Post deleted successfully!",
         });
         fetchPosts();
         fetchStats();
       }
     } catch (error) {
       toast({
-        title: 'Error',
-        description: 'Failed to delete post',
-        variant: 'destructive',
+        title: "Error",
+        description: "Failed to delete post",
+        variant: "destructive",
       });
     }
   };
 
   const resetPostForm = () => {
     setPostForm({
-      platform: 'facebook',
-      content: '',
-      image_url: '',
-      scheduled_time: '',
+      platform: "facebook",
+      content: "",
+      image_url: "",
+      scheduled_time: "",
     });
   };
 
   const resetRuleForm = () => {
     setRuleForm({
-      name: '',
-      trigger: 'new_user',
+      name: "",
+      trigger: "new_user",
       platforms: [],
-      template: '',
+      template: "",
     });
   };
 
   const getPlatformIcon = (platform: string) => {
     switch (platform) {
-      case 'facebook': return '📘';
-      case 'twitter': return '🐦';
-      case 'instagram': return '📷';
-      case 'discord': return '🎮';
-      case 'telegram': return '✈️';
-      default: return '📱';
+      case "facebook":
+        return "📘";
+      case "twitter":
+        return "🐦";
+      case "instagram":
+        return "📷";
+      case "discord":
+        return "🎮";
+      case "telegram":
+        return "✈️";
+      default:
+        return "📱";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'published': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'scheduled': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      case 'draft': return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
-      case 'failed': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
+      case "published":
+        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+      case "scheduled":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+      case "draft":
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
+      case "failed":
+        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200";
     }
   };
 
   const handlePlatformToggle = (platform: string) => {
-    setRuleForm(prev => ({
+    setRuleForm((prev) => ({
       ...prev,
       platforms: prev.platforms.includes(platform)
-        ? prev.platforms.filter(p => p !== platform)
-        : [...prev.platforms, platform]
+        ? prev.platforms.filter((p) => p !== platform)
+        : [...prev.platforms, platform],
     }));
   };
 
@@ -333,14 +353,15 @@ export default function SocialMediaAdminSection() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-bold text-primary">Social Media Management</h2>
-          <p className="text-muted-foreground">Automate and manage your social media presence</p>
+          <h2 className="text-3xl font-bold text-primary">
+            Social Media Management
+          </h2>
+          <p className="text-muted-foreground">
+            Automate and manage your social media presence
+          </p>
         </div>
         <div className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={() => setShowCreateRule(true)}
-          >
+          <Button variant="outline" onClick={() => setShowCreateRule(true)}>
             <Bot className="w-4 h-4 mr-2" />
             Create Automation
           </Button>
@@ -361,8 +382,12 @@ export default function SocialMediaAdminSection() {
             <div className="flex items-center">
               <Share2 className="h-8 w-8 text-primary" />
               <div className="ml-2">
-                <p className="text-sm font-medium text-muted-foreground">Total Posts</p>
-                <p className="text-2xl font-bold text-primary">{stats.totalPosts}</p>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Total Posts
+                </p>
+                <p className="text-2xl font-bold text-primary">
+                  {stats.totalPosts}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -373,8 +398,12 @@ export default function SocialMediaAdminSection() {
             <div className="flex items-center">
               <Heart className="h-8 w-8 text-red-500" />
               <div className="ml-2">
-                <p className="text-sm font-medium text-muted-foreground">Total Engagement</p>
-                <p className="text-2xl font-bold text-red-500">{stats.totalEngagement.toLocaleString()}</p>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Total Engagement
+                </p>
+                <p className="text-2xl font-bold text-red-500">
+                  {stats.totalEngagement.toLocaleString()}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -385,8 +414,12 @@ export default function SocialMediaAdminSection() {
             <div className="flex items-center">
               <Eye className="h-8 w-8 text-blue-500" />
               <div className="ml-2">
-                <p className="text-sm font-medium text-muted-foreground">Total Reach</p>
-                <p className="text-2xl font-bold text-blue-500">{stats.totalReach.toLocaleString()}</p>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Total Reach
+                </p>
+                <p className="text-2xl font-bold text-blue-500">
+                  {stats.totalReach.toLocaleString()}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -397,8 +430,12 @@ export default function SocialMediaAdminSection() {
             <div className="flex items-center">
               <TrendingUp className="h-8 w-8 text-green-500" />
               <div className="ml-2">
-                <p className="text-sm font-medium text-muted-foreground">Weekly Growth</p>
-                <p className="text-2xl font-bold text-green-500">+{stats.weeklyGrowth}%</p>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Weekly Growth
+                </p>
+                <p className="text-2xl font-bold text-green-500">
+                  +{stats.weeklyGrowth}%
+                </p>
               </div>
             </div>
           </CardContent>
@@ -426,7 +463,12 @@ export default function SocialMediaAdminSection() {
                     <Label htmlFor="platform">Platform</Label>
                     <Select
                       value={postForm.platform}
-                      onValueChange={(value) => setPostForm({ ...postForm, platform: value as SocialMediaPost['platform'] })}
+                      onValueChange={(value) =>
+                        setPostForm({
+                          ...postForm,
+                          platform: value as SocialMediaPost["platform"],
+                        })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -446,7 +488,9 @@ export default function SocialMediaAdminSection() {
                     <Textarea
                       id="content"
                       value={postForm.content}
-                      onChange={(e) => setPostForm({ ...postForm, content: e.target.value })}
+                      onChange={(e) =>
+                        setPostForm({ ...postForm, content: e.target.value })
+                      }
                       placeholder="🎰 Big wins happening at CoinKrazy.com! Join now for free SC and GC! #Casino #FreeGames"
                       rows={4}
                     />
@@ -457,18 +501,27 @@ export default function SocialMediaAdminSection() {
                     <Input
                       id="image_url"
                       value={postForm.image_url}
-                      onChange={(e) => setPostForm({ ...postForm, image_url: e.target.value })}
+                      onChange={(e) =>
+                        setPostForm({ ...postForm, image_url: e.target.value })
+                      }
                       placeholder="https://example.com/image.jpg"
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="scheduled_time">Scheduled Time (Optional)</Label>
+                    <Label htmlFor="scheduled_time">
+                      Scheduled Time (Optional)
+                    </Label>
                     <Input
                       id="scheduled_time"
                       type="datetime-local"
                       value={postForm.scheduled_time}
-                      onChange={(e) => setPostForm({ ...postForm, scheduled_time: e.target.value })}
+                      onChange={(e) =>
+                        setPostForm({
+                          ...postForm,
+                          scheduled_time: e.target.value,
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -476,7 +529,7 @@ export default function SocialMediaAdminSection() {
                 <div className="flex gap-2 mt-4">
                   <Button onClick={createPost} disabled={loading}>
                     <Send className="w-4 h-4 mr-2" />
-                    {postForm.scheduled_time ? 'Schedule Post' : 'Post Now'}
+                    {postForm.scheduled_time ? "Schedule Post" : "Post Now"}
                   </Button>
                   <Button
                     variant="outline"
@@ -500,11 +553,18 @@ export default function SocialMediaAdminSection() {
             <CardContent>
               <div className="space-y-4">
                 {posts.map((post) => (
-                  <div key={post.id} className="flex items-start justify-between p-4 border rounded-lg">
+                  <div
+                    key={post.id}
+                    className="flex items-start justify-between p-4 border rounded-lg"
+                  >
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="text-lg">{getPlatformIcon(post.platform)}</span>
-                        <span className="font-medium capitalize">{post.platform}</span>
+                        <span className="text-lg">
+                          {getPlatformIcon(post.platform)}
+                        </span>
+                        <span className="font-medium capitalize">
+                          {post.platform}
+                        </span>
                         <Badge className={getStatusColor(post.status)}>
                           {post.status}
                         </Badge>
@@ -558,7 +618,9 @@ export default function SocialMediaAdminSection() {
                     <Input
                       id="rule_name"
                       value={ruleForm.name}
-                      onChange={(e) => setRuleForm({ ...ruleForm, name: e.target.value })}
+                      onChange={(e) =>
+                        setRuleForm({ ...ruleForm, name: e.target.value })
+                      }
                       placeholder="New User Welcome Post"
                     />
                   </div>
@@ -567,17 +629,28 @@ export default function SocialMediaAdminSection() {
                     <Label htmlFor="trigger">Trigger</Label>
                     <Select
                       value={ruleForm.trigger}
-                      onValueChange={(value) => setRuleForm({ ...ruleForm, trigger: value as AutomationRule['trigger'] })}
+                      onValueChange={(value) =>
+                        setRuleForm({
+                          ...ruleForm,
+                          trigger: value as AutomationRule["trigger"],
+                        })
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="new_user">New User Registration</SelectItem>
-                        <SelectItem value="big_win">Big Win (&gt;$100)</SelectItem>
+                        <SelectItem value="new_user">
+                          New User Registration
+                        </SelectItem>
+                        <SelectItem value="big_win">
+                          Big Win (&gt;$100)
+                        </SelectItem>
                         <SelectItem value="daily">Daily Post</SelectItem>
                         <SelectItem value="weekly">Weekly Summary</SelectItem>
-                        <SelectItem value="game_launch">New Game Launch</SelectItem>
+                        <SelectItem value="game_launch">
+                          New Game Launch
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -585,12 +658,22 @@ export default function SocialMediaAdminSection() {
                   <div>
                     <Label>Platforms</Label>
                     <div className="flex gap-2 mt-2">
-                      {['facebook', 'twitter', 'instagram', 'discord', 'telegram'].map((platform) => (
+                      {[
+                        "facebook",
+                        "twitter",
+                        "instagram",
+                        "discord",
+                        "telegram",
+                      ].map((platform) => (
                         <Button
                           key={platform}
                           type="button"
                           size="sm"
-                          variant={ruleForm.platforms.includes(platform) ? "default" : "outline"}
+                          variant={
+                            ruleForm.platforms.includes(platform)
+                              ? "default"
+                              : "outline"
+                          }
                           onClick={() => handlePlatformToggle(platform)}
                         >
                           {getPlatformIcon(platform)} {platform}
@@ -604,12 +687,15 @@ export default function SocialMediaAdminSection() {
                     <Textarea
                       id="template"
                       value={ruleForm.template}
-                      onChange={(e) => setRuleForm({ ...ruleForm, template: e.target.value })}
+                      onChange={(e) =>
+                        setRuleForm({ ...ruleForm, template: e.target.value })
+                      }
                       placeholder="🎉 Welcome {{username}} to CoinKrazy.com! Enjoy your {{bonus_amount}} welcome bonus! 🎰"
                       rows={3}
                     />
                     <p className="text-xs text-muted-foreground mt-1">
-                      Use variables like {`{{username}}`}, {`{{bonus_amount}}`}, {`{{win_amount}}`}
+                      Use variables like {`{{username}}`}, {`{{bonus_amount}}`},{" "}
+                      {`{{win_amount}}`}
                     </p>
                   </div>
                 </div>
@@ -641,20 +727,27 @@ export default function SocialMediaAdminSection() {
             <CardContent>
               <div className="space-y-4">
                 {automationRules.map((rule) => (
-                  <div key={rule.id} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div
+                    key={rule.id}
+                    className="flex items-center justify-between p-4 border rounded-lg"
+                  >
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
                         <h3 className="font-semibold">{rule.name}</h3>
                         {rule.active ? (
-                          <Badge className="bg-green-100 text-green-800">Active</Badge>
+                          <Badge className="bg-green-100 text-green-800">
+                            Active
+                          </Badge>
                         ) : (
                           <Badge variant="secondary">Inactive</Badge>
                         )}
                         <Badge variant="outline">
-                          {rule.trigger.replace('_', ' ')}
+                          {rule.trigger.replace("_", " ")}
                         </Badge>
                       </div>
-                      <p className="text-sm text-muted-foreground mb-2">{rule.template}</p>
+                      <p className="text-sm text-muted-foreground mb-2">
+                        {rule.template}
+                      </p>
                       <div className="flex gap-2">
                         {rule.platforms.map((platform) => (
                           <span key={platform} className="text-xs">
@@ -669,7 +762,9 @@ export default function SocialMediaAdminSection() {
                     <div className="flex gap-2 items-center">
                       <Switch
                         checked={rule.active}
-                        onCheckedChange={(checked) => toggleAutomationRule(rule.id, checked)}
+                        onCheckedChange={(checked) =>
+                          toggleAutomationRule(rule.id, checked)
+                        }
                       />
                       <Button size="sm" variant="outline">
                         <Edit className="w-4 h-4" />
@@ -692,12 +787,25 @@ export default function SocialMediaAdminSection() {
                 <div className="space-y-4">
                   <h3 className="font-semibold">Platform Performance</h3>
                   <div className="space-y-2">
-                    {['Facebook', 'Twitter', 'Instagram', 'Discord', 'Telegram'].map((platform) => (
-                      <div key={platform} className="flex justify-between items-center p-2 border rounded">
-                        <span>{getPlatformIcon(platform.toLowerCase())} {platform}</span>
+                    {[
+                      "Facebook",
+                      "Twitter",
+                      "Instagram",
+                      "Discord",
+                      "Telegram",
+                    ].map((platform) => (
+                      <div
+                        key={platform}
+                        className="flex justify-between items-center p-2 border rounded"
+                      >
+                        <span>
+                          {getPlatformIcon(platform.toLowerCase())} {platform}
+                        </span>
                         <div className="text-right text-sm">
                           <div>{Math.floor(Math.random() * 1000)} posts</div>
-                          <div className="text-muted-foreground">{Math.floor(Math.random() * 10000)} reach</div>
+                          <div className="text-muted-foreground">
+                            {Math.floor(Math.random() * 10000)} reach
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -709,23 +817,35 @@ export default function SocialMediaAdminSection() {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="text-center p-4 border rounded">
                       <Heart className="h-6 w-6 mx-auto mb-2 text-red-500" />
-                      <p className="text-lg font-semibold">{stats.totalEngagement}</p>
-                      <p className="text-xs text-muted-foreground">Total Likes</p>
+                      <p className="text-lg font-semibold">
+                        {stats.totalEngagement}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Total Likes
+                      </p>
                     </div>
                     <div className="text-center p-4 border rounded">
                       <MessageSquare className="h-6 w-6 mx-auto mb-2 text-blue-500" />
-                      <p className="text-lg font-semibold">{Math.floor(stats.totalEngagement * 0.2)}</p>
+                      <p className="text-lg font-semibold">
+                        {Math.floor(stats.totalEngagement * 0.2)}
+                      </p>
                       <p className="text-xs text-muted-foreground">Comments</p>
                     </div>
                     <div className="text-center p-4 border rounded">
                       <Repeat2 className="h-6 w-6 mx-auto mb-2 text-green-500" />
-                      <p className="text-lg font-semibold">{Math.floor(stats.totalEngagement * 0.3)}</p>
+                      <p className="text-lg font-semibold">
+                        {Math.floor(stats.totalEngagement * 0.3)}
+                      </p>
                       <p className="text-xs text-muted-foreground">Shares</p>
                     </div>
                     <div className="text-center p-4 border rounded">
                       <Eye className="h-6 w-6 mx-auto mb-2 text-purple-500" />
-                      <p className="text-lg font-semibold">{stats.totalReach}</p>
-                      <p className="text-xs text-muted-foreground">Total Reach</p>
+                      <p className="text-lg font-semibold">
+                        {stats.totalReach}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Total Reach
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -744,10 +864,21 @@ export default function SocialMediaAdminSection() {
                 <div>
                   <h3 className="font-semibold mb-4">Platform Connections</h3>
                   <div className="space-y-3">
-                    {['Facebook', 'Twitter', 'Instagram', 'Discord', 'Telegram'].map((platform) => (
-                      <div key={platform} className="flex items-center justify-between p-3 border rounded">
+                    {[
+                      "Facebook",
+                      "Twitter",
+                      "Instagram",
+                      "Discord",
+                      "Telegram",
+                    ].map((platform) => (
+                      <div
+                        key={platform}
+                        className="flex items-center justify-between p-3 border rounded"
+                      >
                         <div className="flex items-center gap-2">
-                          <span className="text-lg">{getPlatformIcon(platform.toLowerCase())}</span>
+                          <span className="text-lg">
+                            {getPlatformIcon(platform.toLowerCase())}
+                          </span>
                           <span>{platform}</span>
                         </div>
                         <Button size="sm" variant="outline">
@@ -763,15 +894,21 @@ export default function SocialMediaAdminSection() {
                   <h3 className="font-semibold mb-4">AI Content Settings</h3>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <Label htmlFor="ai-posts">Enable AI-generated posts</Label>
+                      <Label htmlFor="ai-posts">
+                        Enable AI-generated posts
+                      </Label>
                       <Switch id="ai-posts" />
                     </div>
                     <div className="flex items-center justify-between">
-                      <Label htmlFor="auto-hashtags">Auto-generate hashtags</Label>
+                      <Label htmlFor="auto-hashtags">
+                        Auto-generate hashtags
+                      </Label>
                       <Switch id="auto-hashtags" />
                     </div>
                     <div className="flex items-center justify-between">
-                      <Label htmlFor="sentiment-analysis">Sentiment analysis</Label>
+                      <Label htmlFor="sentiment-analysis">
+                        Sentiment analysis
+                      </Label>
                       <Switch id="sentiment-analysis" />
                     </div>
                   </div>
