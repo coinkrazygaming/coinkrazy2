@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { MiniGameEngine, MINI_GAMES } from '@/lib/miniGameEngine';
 import { useAuth } from '@/contexts/AuthContext';
+import { useBalance } from '@/contexts/BalanceContext';
 import { Trophy, Clock, DollarSign, Target } from 'lucide-react';
 
 interface Dog {
@@ -34,6 +35,7 @@ const DOG_COLORS = ['#8B4513', '#D2691E', '#000000', '#FFFFFF', '#FFD700', '#FF6
 
 export default function DogCatcherGame() {
   const { user } = useAuth();
+  const { updateBalance } = useBalance();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gameLoopRef = useRef<number>();
   const [gameState, setGameState] = useState<'waiting' | 'playing' | 'finished'>('waiting');
@@ -303,11 +305,13 @@ export default function DogCatcherGame() {
         scEarned,
         message: `Congrats on the win! We are crediting your account now! You caught ${dogsCaught} dogs and earned ${scEarned.toFixed(2)} SC. Remember 1 SC = $1 but we do not cash out until $100.00 MIN WITHDRAW and subject to sweepstake laws! Come back tomorrow for another chance to win free SC catching dogs!`,
       });
-      
-      // Update user balance in context if available
+
+      // Update user balance in real-time
       if (result.newBalance) {
-        // This would trigger a balance update
-        console.log('New balance:', result.newBalance);
+        updateBalance({
+          sc: result.newBalance.sc,
+          gc: result.newBalance.gc,
+        });
       }
     }
 
