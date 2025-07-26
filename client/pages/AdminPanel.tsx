@@ -734,7 +734,7 @@ export default function AdminPanel() {
 
         {/* Admin Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid grid-cols-4 md:grid-cols-9 w-full mb-6">
+          <TabsList className="grid grid-cols-4 md:grid-cols-12 w-full mb-6">
             <TabsTrigger value="dashboard">📊 Dashboard</TabsTrigger>
             <TabsTrigger value="analytics">📈 Analytics</TabsTrigger>
             <TabsTrigger value="security">🛡️ Security</TabsTrigger>
@@ -743,6 +743,8 @@ export default function AdminPanel() {
             <TabsTrigger value="store">🛒 Store</TabsTrigger>
             <TabsTrigger value="staff">👮 Staff</TabsTrigger>
             <TabsTrigger value="promotions">🎁 Promotions</TabsTrigger>
+            <TabsTrigger value="bonuses">🎊 Bonuses</TabsTrigger>
+            <TabsTrigger value="social">📱 Social</TabsTrigger>
             <TabsTrigger value="games">🎮 Games</TabsTrigger>
             <TabsTrigger value="system">⚙️ System</TabsTrigger>
           </TabsList>
